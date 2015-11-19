@@ -15,6 +15,7 @@
 		7168DE941BE8E02A00F05250 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7168DE931BE8E02A00F05250 /* Images.xcassets */; };
 		7168DE971BE8E02A00F05250 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7168DE951BE8E02A00F05250 /* LaunchScreen.xib */; };
 		7168DEA31BE8E02A00F05250 /* BackViewDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7168DEA21BE8E02A00F05250 /* BackViewDemoTests.m */; };
+		71BDD74B1BFAA63E00584BF2 /* NothingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 71BDD74A1BFAA63E00584BF2 /* NothingModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		7168DE9C1BE8E02A00F05250 /* BackViewDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BackViewDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7168DEA11BE8E02A00F05250 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7168DEA21BE8E02A00F05250 /* BackViewDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BackViewDemoTests.m; sourceTree = "<group>"; };
+		71BDD7491BFAA63E00584BF2 /* NothingModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NothingModel.h; sourceTree = "<group>"; };
+		71BDD74A1BFAA63E00584BF2 /* NothingModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NothingModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,12 +87,15 @@
 		7168DE851BE8E02A00F05250 /* BackViewDemo */ = {
 			isa = PBXGroup;
 			children = (
+				71D6B5E81BFE1600002D2679 /* wzz */,
 				71400C741BF8E24300A257AE /* WZZChooseBackView.h */,
 				71400C751BF8E24300A257AE /* WZZChooseBackView.m */,
 				7168DE8A1BE8E02A00F05250 /* AppDelegate.h */,
 				7168DE8B1BE8E02A00F05250 /* AppDelegate.m */,
 				7168DE8D1BE8E02A00F05250 /* ViewController.h */,
 				7168DE8E1BE8E02A00F05250 /* ViewController.m */,
+				71BDD7491BFAA63E00584BF2 /* NothingModel.h */,
+				71BDD74A1BFAA63E00584BF2 /* NothingModel.m */,
 				7168DE901BE8E02A00F05250 /* Main.storyboard */,
 				7168DE931BE8E02A00F05250 /* Images.xcassets */,
 				7168DE951BE8E02A00F05250 /* LaunchScreen.xib */,
@@ -122,6 +128,13 @@
 				7168DEA11BE8E02A00F05250 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		71D6B5E81BFE1600002D2679 /* wzz */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = wzz;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,6 +240,7 @@
 				7168DE8F1BE8E02A00F05250 /* ViewController.m in Sources */,
 				7168DE8C1BE8E02A00F05250 /* AppDelegate.m in Sources */,
 				71400C761BF8E24300A257AE /* WZZChooseBackView.m in Sources */,
+				71BDD74B1BFAA63E00584BF2 /* NothingModel.m in Sources */,
 				7168DE891BE8E02A00F05250 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
