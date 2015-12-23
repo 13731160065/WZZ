@@ -18,6 +18,8 @@
 		71D7B4381C2A847900874872 /* WZZPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D7B4371C2A847900874872 /* WZZPlayerManager.m */; };
 		71D7B43A1C2A84EA00874872 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71D7B4391C2A84EA00874872 /* MediaPlayer.framework */; };
 		71D7B43C1C2A84F800874872 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71D7B43B1C2A84F800874872 /* AVFoundation.framework */; };
+		71D7B43E1C2A923900874872 /* IMG_0167.PNG in Resources */ = {isa = PBXBuildFile; fileRef = 71D7B43D1C2A923900874872 /* IMG_0167.PNG */; };
+		71D7B4421C2A929400874872 /* WZZCacheTheImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D7B4411C2A929400874872 /* WZZCacheTheImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,10 @@
 		71D7B4371C2A847900874872 /* WZZPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZPlayerManager.m; sourceTree = "<group>"; };
 		71D7B4391C2A84EA00874872 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		71D7B43B1C2A84F800874872 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		71D7B43D1C2A923900874872 /* IMG_0167.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0167.PNG; sourceTree = "<group>"; };
+		71D7B4401C2A929400874872 /* WZZCacheTheImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZCacheTheImage.h; sourceTree = "<group>"; };
+		71D7B4411C2A929400874872 /* WZZCacheTheImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZCacheTheImage.m; sourceTree = "<group>"; };
+		71D7B4431C2A931500874872 /* Singleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +96,8 @@
 		71D7B3F61C2A7CCD00874872 = {
 			isa = PBXGroup;
 			children = (
+				71D7B43F1C2A929400874872 /* WZZCacheTheImage */,
+				71D7B43D1C2A923900874872 /* IMG_0167.PNG */,
 				71D7B43B1C2A84F800874872 /* AVFoundation.framework */,
 				71D7B4391C2A84EA00874872 /* MediaPlayer.framework */,
 				71D7B4351C2A847900874872 /* WZZPlayerManager */,
@@ -159,6 +167,16 @@
 				71D7B4371C2A847900874872 /* WZZPlayerManager.m */,
 			);
 			path = WZZPlayerManager;
+			sourceTree = "<group>";
+		};
+		71D7B43F1C2A929400874872 /* WZZCacheTheImage */ = {
+			isa = PBXGroup;
+			children = (
+				71D7B4431C2A931500874872 /* Singleton.h */,
+				71D7B4401C2A929400874872 /* WZZCacheTheImage.h */,
+				71D7B4411C2A929400874872 /* WZZCacheTheImage.m */,
+			);
+			path = WZZCacheTheImage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71D7B4121C2A7CCD00874872 /* LaunchScreen.storyboard in Resources */,
+				71D7B43E1C2A923900874872 /* IMG_0167.PNG in Resources */,
 				71D7B40F1C2A7CCD00874872 /* Assets.xcassets in Resources */,
 				71D7B40D1C2A7CCD00874872 /* Main.storyboard in Resources */,
 			);
@@ -292,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71D7B4381C2A847900874872 /* WZZPlayerManager.m in Sources */,
+				71D7B4421C2A929400874872 /* WZZCacheTheImage.m in Sources */,
 				71D7B40A1C2A7CCD00874872 /* ViewController.m in Sources */,
 				71D7B4071C2A7CCD00874872 /* AppDelegate.m in Sources */,
 				71D7B4041C2A7CCD00874872 /* main.m in Sources */,

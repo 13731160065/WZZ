@@ -28,17 +28,30 @@
                                     <action selector="playVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8Lr-b7-jkg"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_0167.PNG" translatesAutoresizingMaskIntoConstraints="NO" id="of6-62-fy8">
+                                <rect key="frame" x="20" y="159" width="560" height="421"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="of6-62-fy8" secondAttribute="bottom" constant="20" id="6Ue-8x-IIB"/>
                             <constraint firstItem="Tjg-Oh-OUg" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="91" id="Dyx-FD-aI3"/>
+                            <constraint firstAttribute="trailing" secondItem="of6-62-fy8" secondAttribute="trailing" constant="20" id="EZs-VD-0Il"/>
+                            <constraint firstItem="of6-62-fy8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="SPu-d4-jok"/>
+                            <constraint firstItem="of6-62-fy8" firstAttribute="top" secondItem="Tjg-Oh-OUg" secondAttribute="bottom" constant="18" id="tNm-v9-m1K"/>
                             <constraint firstItem="Tjg-Oh-OUg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="x3z-YU-xvd"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imgV" destination="of6-62-fy8" id="T6L-y2-UJt"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="405" y="380"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="IMG_0167.PNG" width="1125" height="2001"/>
+    </resources>
 </document>
