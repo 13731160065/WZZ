@@ -1,0 +1,54 @@
+# Uncomment this line to define a global platform for your project
+# source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+
+pod 'FMDB'
+
+pod 'AFNetworking'
+
+pod 'MBProgressHUD'
+
+pod 'SDWebImage'
+
+#自动布局
+pod 'Masonry'
+
+pod 'MJRefresh', :git => 'https://github.com/CoderMJLee/MJRefresh.git'
+
+
+#日历控件
+pod 'JTCalendar'
+#进度条
+pod 'ASProgressPopUpView', '~> 0.8'
+
+#自动管理软键盘遮挡视图问题
+pod 'IQKeyboardManager'
+
+#选项卡
+pod 'THSegmentedPager'
+
+#日历
+pod 'FSCalendar'
+
+#log
+pod 'CocoaLumberjack'
+
+#高德2D地图
+pod 'AMap2DMap'
+#高德search service
+pod 'AMapSearch'
+
+pod "LLSlideMenu"
+
+# 友盟
+pod 'UMengSocial', '~> 4.3'
+pod 'UMengAnalytics-NO-IDFA'
+
+# 支付宝
+#pod 'AliPaySDK', '~> 1.0'
+
+
+
+
+
+
