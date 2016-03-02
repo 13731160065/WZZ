@@ -36,6 +36,8 @@
 		71AE53E71C7F116300AB4ECD /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AE53E61C7F116300AB4ECD /* CoreVideo.framework */; };
 		71AE53E91C7F117000AB4ECD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AE53E81C7F117000AB4ECD /* CoreMedia.framework */; };
 		71AE53EC1C7F154200AB4ECD /* WZZVideoEditManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */; };
+		71DA36F01C85A11600ADE4CC /* face.png in Resources */ = {isa = PBXBuildFile; fileRef = 71DA36EF1C85A11600ADE4CC /* face.png */; };
+		71DA36F21C85A53600ADE4CC /* me.png in Resources */ = {isa = PBXBuildFile; fileRef = 71DA36F11C85A53600ADE4CC /* me.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,6 +194,8 @@
 		71AE53E81C7F117000AB4ECD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		71AE53EA1C7F154200AB4ECD /* WZZVideoEditManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZVideoEditManager.h; sourceTree = "<group>"; };
 		71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZVideoEditManager.m; sourceTree = "<group>"; };
+		71DA36EF1C85A11600ADE4CC /* face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face.png; sourceTree = "<group>"; };
+		71DA36F11C85A53600ADE4CC /* me.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = me.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,10 +271,12 @@
 		71AE53271C7EB7B100AB4ECD /* FacePlayRash */ = {
 			isa = PBXGroup;
 			children = (
+				71DA36EF1C85A11600ADE4CC /* face.png */,
 				71385DD91C80464D0051CAA3 /* rabbit.jpg */,
 				71385DDD1C8048840051CAA3 /* dog.gif */,
 				71385DDF1C804C1E0051CAA3 /* 36.gif */,
 				71385DE11C804E5B0051CAA3 /* flo.png */,
+				71DA36F11C85A53600ADE4CC /* me.png */,
 				71385DE31C80502F0051CAA3 /* camera.png */,
 				71AE532B1C7EB7B100AB4ECD /* AppDelegate.h */,
 				71AE532C1C7EB7B100AB4ECD /* AppDelegate.mm */,
@@ -599,8 +605,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71DA36F21C85A53600ADE4CC /* me.png in Resources */,
 				71385DDA1C80464D0051CAA3 /* rabbit.jpg in Resources */,
 				71AE53381C7EB7B100AB4ECD /* LaunchScreen.storyboard in Resources */,
+				71DA36F01C85A11600ADE4CC /* face.png in Resources */,
 				71385DE41C80502F0051CAA3 /* camera.png in Resources */,
 				71AE53351C7EB7B100AB4ECD /* Assets.xcassets in Resources */,
 				71385DE01C804C1E0051CAA3 /* 36.gif in Resources */,
