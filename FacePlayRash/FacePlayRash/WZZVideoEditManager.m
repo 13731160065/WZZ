@@ -23,6 +23,10 @@
     NSInteger currentImageNum;
     NSInteger allImageNum;
     long long _currentZhen;
+    
+    //临时全局变量
+    UIImageView * backImageView;
+    UIImageView * otherImageView;
 }
 
 @property (nonatomic, strong) AVAssetImageGenerator * myImageGenerator;
@@ -422,6 +426,41 @@ singleton_implementation(WZZVideoEditManager)
     }
     
     return [faceModelArr firstObject];
+}
+
+#pragma mark 合成图像
+- (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2 {
+    //初始化一次imageView
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        backImageView = [[UIImageView alloc] init];
+        otherImageView = [[UIImageView alloc] init];
+        [backImageView addSubview:otherImageView];
+        [backImageView setFrame:CGRectMake(0, 0, backImage.size.width, backImage.size.height)];
+    });
+    
+    //设置脸的位置和图片
+    WZZFaceModel * faceModel = [self getOriginWithImage:backImage];
+    CGFloat x = faceModel.frame.origin.x;
+    CGFloat y = faceModel.frame.origin.y;
+    CGFloat w = faceModel.frame.size.width;
+    CGFloat h = faceModel.frame.size.height;
+    [otherImageView setFrame:CGRectMake(x-(x*1.25-x)/2, y-(y*1.25-y)/2, w*1.25, h*1.25)];
+    backImageView.image = backImage;
+    otherImageView.image = image2;
+    
+    //截取图片
+    UIGraphicsBeginImageContextWithOptions(backImage.size, NO, 1.0f);
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [backImageView.layer renderInContext:ctx];
+    
+    UIImage *imgDraw = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return imgDraw;
 }
 
 @end

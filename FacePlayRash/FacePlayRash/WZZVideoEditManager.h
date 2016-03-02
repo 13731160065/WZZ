@@ -39,6 +39,11 @@ singleton_interface(WZZVideoEditManager)
  */
 - (WZZFaceModel *)getOriginWithImage:(UIImage *)aImage;
 
+/**
+ 组合图片
+ */
+- (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2;
+
 @end
 
 @interface WZZFaceModel : NSObject
