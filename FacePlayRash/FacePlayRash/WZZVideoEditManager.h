@@ -27,7 +27,7 @@ singleton_interface(WZZVideoEditManager)
 /**
  处理图片转为8进制打印
  */
-- (void)handleImageWithImage:(UIImage *)image;
+- (UIImage *)handleImageWithImage:(UIImage *)image;
 
 /**
  处理图像

@@ -227,7 +227,8 @@ singleton_implementation(WZZVideoEditManager)
     }];
 }
 
-- (void)handleImageWithImage:(UIImage *)image {
+- (UIImage *)handleImageWithImage:(UIImage *)image {
+    
     //1.把UIImage对象转换为需要被核心图形库调用的CGImage对象。同时，得到图形的宽度和高度。
     CGImageRef cgImage = [image CGImage];
     //宽
@@ -260,6 +261,7 @@ singleton_implementation(WZZVideoEditManager)
     NSLog(@"Brightness of image:");
     
     //2.定义一个指向第一个像素的指针，并使用2个for循环来遍历像素。其实也可以使用一个for循环从0遍历到width*height，但是这样写更容易理解图形是二维的。
+#if 0
     UInt32 * currentPixel = pixels;
     for (NSUInteger j = 0; j < cgImageHeight; j++) {
         for (NSUInteger i = 0; i < cgImageWidth; i++) {
@@ -273,17 +275,48 @@ singleton_implementation(WZZVideoEditManager)
     }
     
     //此时此刻，这个程序只是打印出了原图的像素信息，但并没有进行任何修改！下面将会教你如何进行修改。
+#else
+    //------------------------------------------------------------------------------
+    NSString * str = @"";
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
     
+    UInt32 * currentPixel = pixels;
+    for (NSUInteger j = 0; j < cgImageHeight; j++) {
+        for (NSUInteger i = 0; i < cgImageWidth; i++) {
+            // 3.得到当前像素的值赋值给currentPixel并把它的亮度值打印出来
+            UInt32 color = *currentPixel;
+//            printf("%3.0f ",     (R(color)+G(color)+B(color))/3.0);
+            float fff = (R(color)+G(color)+B(color))/3.0f;
+            str = [str stringByAppendingFormat:@"%3.0f ", 255-fff];
+            // 4.增加currentPixel的值，使它指向下一个像素。如果你对指针的运算比较生疏，记住这个：currentPixel是一个指向UInt32的变量，当你把它加1后，它就会向前移动4字节（32位），然后指向了下一个像素的值。
+            currentPixel++;
+        }
+//        printf("\n\n");
+        NSLog(@"%lf", j/cgImageHeight*100.0f);
+        str = [str stringByAppendingString:@"\n\n"];
+    }
+    NSLog(@"%@", str);
+    
+    label.text = str;
+    label.frame = CGRectMake(0, 0, image.size.width*10, image.size.height*10);
+    [label setAdjustsFontSizeToFitWidth:YES];
+    label.numberOfLines = 0;
+    
+    //截取图片
+    UIGraphicsBeginImageContextWithOptions(label.frame.size, NO, 1.0f);
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [label.layer renderInContext:ctx];
+    
+    UIImage *imgDraw = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return imgDraw;
+    //------------------------------------------------------------------------------
+#endif
 }
-
-//- (void)processImage:(UIImage*)inputImage finish:(void(^)(UIImage *))finishBlock {
-//
-//    UIImage * outputImage = [self processUsingPixels:inputImage];
-//    if (finishBlock) {
-//        finishBlock(outputImage);
-//    }
-//
-//}
 
 #pragma mark - Public
 
