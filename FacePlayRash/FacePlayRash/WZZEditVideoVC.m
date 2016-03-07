@@ -120,13 +120,17 @@
 
 - (void)lastButtonClick {
     if (currentImageIdx > 0) {
-        imageView.image = editImageArr[--currentImageIdx];
+        --currentImageIdx;
+        slider.value = currentImageIdx;
+        [self sliderClick:slider];
     }
 }
 
 - (void)nextButtonClick {
     if (currentImageIdx < editImageArr.count-1) {
-        imageView.image = editImageArr[++currentImageIdx];
+        ++currentImageIdx;
+        slider.value = currentImageIdx;
+        [self sliderClick:slider];
     }
 }
 
@@ -140,7 +144,8 @@
     //初始化源图片数组
     NSString *urlAsString = [NSString stringWithFormat:@"%@/Documents/asdf.m4v", NSHomeDirectory()];
     NSURL    *url = [NSURL fileURLWithPath:urlAsString];
-    [[WZZVideoEditManager sharedWZZVideoEditManager] video2ImagesWithURL:url progress:^(NSInteger progress) {
+    
+    [[WZZVideoEditManager sharedWZZVideoEditManager] video2ImagesWithURL:_videoUrl progress:^(NSInteger progress) {
         NSLog(@"%ld", progress);
     } finishBlock:^(NSMutableArray<UIImage *> *imagesArr) {
         [sourceImageArr addObjectsFromArray:imagesArr];

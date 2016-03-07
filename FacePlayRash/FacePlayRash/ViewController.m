@@ -15,6 +15,7 @@
 {
     NSMutableArray * arr;
     UIImageView * imgv;
+    BOOL isVideo;
 }
 
 @end
@@ -50,8 +51,17 @@
 }
 
 - (void)imgvClick {
-        WZZEditVideoVC  * edit = [[WZZEditVideoVC alloc] init];
-        [self presentViewController:edit animated:YES completion:nil];
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate = self;
+    //相册
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:imagePicker.sourceType];
+    }
+    imagePicker.mediaTypes = @[@"public.movie"];
+    isVideo = YES;
+    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 - (void)buttonClick:(UIButton *)button {
@@ -80,6 +90,7 @@
         imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:imagePicker.sourceType];
     }
     imagePicker.mediaTypes = @[@"public.image"];
+    isVideo = NO;
     [self presentViewController:imagePicker animated:YES completion:nil];
     
 }
@@ -96,10 +107,11 @@
         imgv.animationImages = imagesArr;
         [imagesArr enumerateObjectsUsingBlock:^(UIImage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [imagesArr replaceObjectAtIndex:idx withObject:[[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:obj image2:[UIImage imageNamed:@"dog.gif"]]];
-//            [imagesArr replaceObjectAtIndex:idx withObject:[[WZZVideoEditManager sharedWZZVideoEditManager] processImage:obj faceModel:[[WZZVideoEditManager sharedWZZVideoEditManager] getOriginWithImage:obj]]];
+            //            [imagesArr replaceObjectAtIndex:idx withObject:[[WZZVideoEditManager sharedWZZVideoEditManager] processImage:obj faceModel:[[WZZVideoEditManager sharedWZZVideoEditManager] getOriginWithImage:obj]]];
         }];
         [imgv startAnimating];
         [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArr:imagesArr];
+        
     }];
 #else//图像处理
     [[WZZVideoEditManager sharedWZZVideoEditManager] getOriginWithImage:[UIImage imageNamed:@"me"]];
@@ -108,11 +120,17 @@
 
 #pragma mark - 图片选择器代理
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    UIImage *image = info[UIImagePickerControllerOriginalImage];
     [self dismissViewControllerAnimated:YES completion:^{
-        WZZShowVC * show = [[WZZShowVC alloc] init];
-        show.image = image;
-        [self presentViewController:show animated:YES completion:nil];
+        if (isVideo) {
+            WZZEditVideoVC  * edit = [[WZZEditVideoVC alloc] init];
+            edit.videoUrl = info[UIImagePickerControllerMediaURL];
+            [self presentViewController:edit animated:YES completion:nil];
+        } else {
+            UIImage *image = info[UIImagePickerControllerOriginalImage];
+            WZZShowVC * show = [[WZZShowVC alloc] init];
+            show.image = image;
+            [self presentViewController:show animated:YES completion:nil];
+        }
     }];
 }
 

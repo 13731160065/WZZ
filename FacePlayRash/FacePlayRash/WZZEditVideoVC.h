@@ -10,4 +10,6 @@
 
 @interface WZZEditVideoVC : UIViewController
 
+@property (strong, nonatomic) NSURL * videoUrl;
+
 @end
