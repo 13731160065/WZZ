@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		71385DDE1C8048840051CAA3 /* dog.gif in Resources */ = {isa = PBXBuildFile; fileRef = 71385DDD1C8048840051CAA3 /* dog.gif */; };
 		719CE7D51C8703AE00ED142E /* WZZShowVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CE7D41C8703AE00ED142E /* WZZShowVC.m */; };
+		71A254191C8D6FD900D4CFF5 /* WZZMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A254181C8D6FD900D4CFF5 /* WZZMutableArray.m */; };
+		71A254261C8D717300D4CFF5 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A2541C1C8D717300D4CFF5 /* FMDatabase.m */; };
+		71A254271C8D717300D4CFF5 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A2541E1C8D717300D4CFF5 /* FMDatabaseAdditions.m */; };
+		71A254281C8D717300D4CFF5 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A254201C8D717300D4CFF5 /* FMDatabasePool.m */; };
+		71A254291C8D717300D4CFF5 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A254221C8D717300D4CFF5 /* FMDatabaseQueue.m */; };
+		71A2542A1C8D717300D4CFF5 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A254251C8D717300D4CFF5 /* FMResultSet.m */; };
+		71A2542C1C8D72BB00D4CFF5 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 71A2542B1C8D72BB00D4CFF5 /* libsqlite3.tbd */; };
 		71ADD7A51C8911E3002E7331 /* WZZEditVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADD7A41C8911E3002E7331 /* WZZEditVideoVC.m */; };
 		71AE532A1C7EB7B100AB4ECD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AE53291C7EB7B100AB4ECD /* main.m */; };
 		71AE532D1C7EB7B100AB4ECD /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 71AE532C1C7EB7B100AB4ECD /* AppDelegate.mm */; };
@@ -58,6 +65,20 @@
 		71385DDD1C8048840051CAA3 /* dog.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dog.gif; sourceTree = "<group>"; };
 		719CE7D31C8703AE00ED142E /* WZZShowVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZShowVC.h; sourceTree = "<group>"; };
 		719CE7D41C8703AE00ED142E /* WZZShowVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZShowVC.m; sourceTree = "<group>"; };
+		71A254171C8D6FD900D4CFF5 /* WZZMutableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZMutableArray.h; sourceTree = "<group>"; };
+		71A254181C8D6FD900D4CFF5 /* WZZMutableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZMutableArray.m; sourceTree = "<group>"; };
+		71A2541B1C8D717300D4CFF5 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		71A2541C1C8D717300D4CFF5 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		71A2541D1C8D717300D4CFF5 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		71A2541E1C8D717300D4CFF5 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		71A2541F1C8D717300D4CFF5 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		71A254201C8D717300D4CFF5 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		71A254211C8D717300D4CFF5 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		71A254221C8D717300D4CFF5 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		71A254231C8D717300D4CFF5 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		71A254241C8D717300D4CFF5 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		71A254251C8D717300D4CFF5 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		71A2542B1C8D72BB00D4CFF5 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		71ADD7A31C8911E3002E7331 /* WZZEditVideoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZEditVideoVC.h; sourceTree = "<group>"; };
 		71ADD7A41C8911E3002E7331 /* WZZEditVideoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZEditVideoVC.m; sourceTree = "<group>"; };
 		71AE53251C7EB7B100AB4ECD /* FacePlayRash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FacePlayRash.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,6 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71A2542C1C8D72BB00D4CFF5 /* libsqlite3.tbd in Frameworks */,
 				71AE53E91C7F117000AB4ECD /* CoreMedia.framework in Frameworks */,
 				71AE53E71C7F116300AB4ECD /* CoreVideo.framework in Frameworks */,
 				71AE53E51C7F115100AB4ECD /* QuartzCore.framework in Frameworks */,
@@ -232,9 +254,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		71A2541A1C8D717300D4CFF5 /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				71A2541B1C8D717300D4CFF5 /* FMDatabase.h */,
+				71A2541C1C8D717300D4CFF5 /* FMDatabase.m */,
+				71A2541D1C8D717300D4CFF5 /* FMDatabaseAdditions.h */,
+				71A2541E1C8D717300D4CFF5 /* FMDatabaseAdditions.m */,
+				71A2541F1C8D717300D4CFF5 /* FMDatabasePool.h */,
+				71A254201C8D717300D4CFF5 /* FMDatabasePool.m */,
+				71A254211C8D717300D4CFF5 /* FMDatabaseQueue.h */,
+				71A254221C8D717300D4CFF5 /* FMDatabaseQueue.m */,
+				71A254231C8D717300D4CFF5 /* FMDB.h */,
+				71A254241C8D717300D4CFF5 /* FMResultSet.h */,
+				71A254251C8D717300D4CFF5 /* FMResultSet.m */,
+			);
+			path = FMDB;
+			sourceTree = "<group>";
+		};
 		71AE531C1C7EB7B100AB4ECD = {
 			isa = PBXGroup;
 			children = (
+				71A2542B1C8D72BB00D4CFF5 /* libsqlite3.tbd */,
 				71385DD81C7FF2A90051CAA3 /* Singleton.h */,
 				71AE53E81C7F117000AB4ECD /* CoreMedia.framework */,
 				71AE53E61C7F116300AB4ECD /* CoreVideo.framework */,
@@ -244,6 +285,7 @@
 				71AE53D81C7EBC0800AB4ECD /* libiconv.tbd */,
 				71AE53D61C7EBBF700AB4ECD /* libbz2.tbd */,
 				71AE53D41C7EBBEC00AB4ECD /* libz.tbd */,
+				71A2541A1C8D717300D4CFF5 /* FMDB */,
 				71AE535B1C7EB82800AB4ECD /* FFmpeg-iOS */,
 				71AE53271C7EB7B100AB4ECD /* FacePlayRash */,
 				71AE53411C7EB7B100AB4ECD /* FacePlayRashTests */,
@@ -276,6 +318,8 @@
 				719CE7D41C8703AE00ED142E /* WZZShowVC.m */,
 				71AE53EA1C7F154200AB4ECD /* WZZVideoEditManager.h */,
 				71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */,
+				71A254171C8D6FD900D4CFF5 /* WZZMutableArray.h */,
+				71A254181C8D6FD900D4CFF5 /* WZZMutableArray.m */,
 				71AE53311C7EB7B100AB4ECD /* Main.storyboard */,
 				71AE53341C7EB7B100AB4ECD /* Assets.xcassets */,
 				71AE53361C7EB7B100AB4ECD /* LaunchScreen.storyboard */,
@@ -627,11 +671,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				71AE53301C7EB7B100AB4ECD /* ViewController.m in Sources */,
+				71A254191C8D6FD900D4CFF5 /* WZZMutableArray.m in Sources */,
 				71AE532D1C7EB7B100AB4ECD /* AppDelegate.mm in Sources */,
 				719CE7D51C8703AE00ED142E /* WZZShowVC.m in Sources */,
 				71AE532A1C7EB7B100AB4ECD /* main.m in Sources */,
+				71A254271C8D717300D4CFF5 /* FMDatabaseAdditions.m in Sources */,
+				71A2542A1C8D717300D4CFF5 /* FMResultSet.m in Sources */,
 				71ADD7A51C8911E3002E7331 /* WZZEditVideoVC.m in Sources */,
+				71A254281C8D717300D4CFF5 /* FMDatabasePool.m in Sources */,
+				71A254291C8D717300D4CFF5 /* FMDatabaseQueue.m in Sources */,
 				71AE53EC1C7F154200AB4ECD /* WZZVideoEditManager.m in Sources */,
+				71A254261C8D717300D4CFF5 /* FMDatabase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,7 +822,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/FFmpeg-iOS/include";
 				INFOPLIST_FILE = FacePlayRash/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -784,6 +835,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wzz.FacePlayRash;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -791,7 +843,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/FFmpeg-iOS/include";
 				INFOPLIST_FILE = FacePlayRash/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -803,6 +856,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wzz.FacePlayRash;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

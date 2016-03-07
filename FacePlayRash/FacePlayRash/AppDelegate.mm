@@ -20,4 +20,8 @@
     return YES;
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    NSLog(@"bang!");
+}
+
 @end

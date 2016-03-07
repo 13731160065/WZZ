@@ -97,10 +97,10 @@ singleton_implementation(WZZVideoEditManager)
                                                          
                                                          if (result == AVAssetImageGeneratorSucceeded) {
                                                              // Do something interesting with the image.
-                                                             
-                                                             UIImage* image1 = [UIImage imageWithCGImage: image];
-                                                             //                                                  UIImageWriteToSavedPhotosAlbum(image1, self, nil, nil);
-                                                             [imagesArray addObject:image1];
+                                                             @autoreleasepool {
+                                                                 UIImage * image1 = [UIImage imageWithCGImage:image];
+                                                                 [imagesArray addObject:image1];
+                                                             }
                                                              currentImageNum++;
                                                              double aaa = (double)currentImageNum/(double)allImageNum*100.0f;
                                                              NSInteger progress = (NSInteger)aaa;
@@ -431,6 +431,7 @@ singleton_implementation(WZZVideoEditManager)
 
 #pragma mark 获取人脸位置
 - (WZZFaceModel *)getOriginWithImage:(UIImage *)aImage {
+    
     CIImage* image = [CIImage imageWithCGImage:aImage.CGImage];
     
     NSDictionary  *opts = [NSDictionary dictionaryWithObject:CIDetectorAccuracyHigh
@@ -448,26 +449,28 @@ singleton_implementation(WZZVideoEditManager)
     
     for (CIFaceFeature *f in features)
     {
-        CGRect aRect = f.bounds;
-        NSLog(@"%f, %f, %f, %f", aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height);
-        WZZFaceModel * model = [[WZZFaceModel alloc] init];
-        model.frame = aRect;
-        
-        //眼睛和嘴的位置
-        if(f.hasLeftEyePosition) {
-            model.leftEye = f.leftEyePosition;
-            NSLog(@"Left eye %g %g\n", f.leftEyePosition.x, f.leftEyePosition.y);
+        @autoreleasepool {
+            CGRect aRect = f.bounds;
+            NSLog(@"%f, %f, %f, %f", aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height);
+            WZZFaceModel * model = [[WZZFaceModel alloc] init];
+            model.frame = aRect;
+            
+            //眼睛和嘴的位置
+            if(f.hasLeftEyePosition) {
+                model.leftEye = f.leftEyePosition;
+                NSLog(@"Left eye %g %g\n", f.leftEyePosition.x, f.leftEyePosition.y);
+            }
+            if(f.hasRightEyePosition) {
+                model.rightEye = f.rightEyePosition;
+                NSLog(@"Right eye %g %g\n", f.rightEyePosition.x, f.rightEyePosition.y);
+            }
+            if(f.hasMouthPosition) {
+                model.mouth = f.mouthPosition;
+                NSLog(@"Mouth %g %g\n", f.mouthPosition.x, f.mouthPosition.y);
+            }
+            
+            [faceModelArr addObject:model];
         }
-        if(f.hasRightEyePosition) {
-            model.rightEye = f.rightEyePosition;
-            NSLog(@"Right eye %g %g\n", f.rightEyePosition.x, f.rightEyePosition.y);
-        }
-        if(f.hasMouthPosition) {
-            model.mouth = f.mouthPosition;
-            NSLog(@"Mouth %g %g\n", f.mouthPosition.x, f.mouthPosition.y);
-        }
-        
-        [faceModelArr addObject:model];
     }
     
     return [faceModelArr firstObject];
