@@ -25,12 +25,12 @@ singleton_interface(WZZVideoEditManager)
 - (void)images2VideoWithImageArr:(NSMutableArray <UIImage *>*)imagesArr;
 
 /**
- 处理图片转为8进制打印
+ !!!处理图片转为8进制打印，这个方法一般不用
  */
 - (UIImage *)handleImageWithImage:(UIImage *)image;
 
 /**
- 处理图像
+ !!!合成图像，这个方法一般不用
  */
 - (UIImage *)processImage:(UIImage *)inputImage faceModel:(WZZFaceModel *)faceModel;
 
@@ -40,9 +40,19 @@ singleton_interface(WZZVideoEditManager)
 - (WZZFaceModel *)getOriginWithImage:(UIImage *)aImage;
 
 /**
- 组合图片
+ 组合图片自动遮脸
  */
 - (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2;
+
+/**
+ 组合图片自动遮脸-反脸位置
+ */
+- (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2 returnFaceModelBlock:(void(^)(WZZFaceModel * faceModel))faceModelBlock;
+
+/**
+ 根据固定坐标组合图片
+ */
+- (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2 faceRect:(CGRect)rect;
 
 @end
 

@@ -13,6 +13,7 @@
 		71385DE21C804E5B0051CAA3 /* flo.png in Resources */ = {isa = PBXBuildFile; fileRef = 71385DE11C804E5B0051CAA3 /* flo.png */; };
 		71385DE41C80502F0051CAA3 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 71385DE31C80502F0051CAA3 /* camera.png */; };
 		719CE7D51C8703AE00ED142E /* WZZShowVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CE7D41C8703AE00ED142E /* WZZShowVC.m */; };
+		71ADD7A51C8911E3002E7331 /* WZZEditVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 71ADD7A41C8911E3002E7331 /* WZZEditVideoVC.m */; };
 		71AE532A1C7EB7B100AB4ECD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AE53291C7EB7B100AB4ECD /* main.m */; };
 		71AE532D1C7EB7B100AB4ECD /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 71AE532C1C7EB7B100AB4ECD /* AppDelegate.mm */; };
 		71AE53301C7EB7B100AB4ECD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AE532F1C7EB7B100AB4ECD /* ViewController.m */; };
@@ -67,6 +68,8 @@
 		71385DE31C80502F0051CAA3 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		719CE7D31C8703AE00ED142E /* WZZShowVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZShowVC.h; sourceTree = "<group>"; };
 		719CE7D41C8703AE00ED142E /* WZZShowVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZShowVC.m; sourceTree = "<group>"; };
+		71ADD7A31C8911E3002E7331 /* WZZEditVideoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZEditVideoVC.h; sourceTree = "<group>"; };
+		71ADD7A41C8911E3002E7331 /* WZZEditVideoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZEditVideoVC.m; sourceTree = "<group>"; };
 		71AE53251C7EB7B100AB4ECD /* FacePlayRash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FacePlayRash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71AE53291C7EB7B100AB4ECD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		71AE532B1C7EB7B100AB4ECD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -285,6 +288,8 @@
 				71AE532C1C7EB7B100AB4ECD /* AppDelegate.mm */,
 				71AE532E1C7EB7B100AB4ECD /* ViewController.h */,
 				71AE532F1C7EB7B100AB4ECD /* ViewController.m */,
+				71ADD7A31C8911E3002E7331 /* WZZEditVideoVC.h */,
+				71ADD7A41C8911E3002E7331 /* WZZEditVideoVC.m */,
 				719CE7D31C8703AE00ED142E /* WZZShowVC.h */,
 				719CE7D41C8703AE00ED142E /* WZZShowVC.m */,
 				71AE53EA1C7F154200AB4ECD /* WZZVideoEditManager.h */,
@@ -648,6 +653,7 @@
 				71AE532D1C7EB7B100AB4ECD /* AppDelegate.mm in Sources */,
 				719CE7D51C8703AE00ED142E /* WZZShowVC.m in Sources */,
 				71AE532A1C7EB7B100AB4ECD /* main.m in Sources */,
+				71ADD7A51C8911E3002E7331 /* WZZEditVideoVC.m in Sources */,
 				71AE53EC1C7F154200AB4ECD /* WZZVideoEditManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -212,7 +212,7 @@ singleton_implementation(WZZVideoEditManager)
             CVPixelBufferRef buffer = NULL;
             
             int idx = frame;
-            NSLog(@"%d", frame);
+            NSLog(@"%lf()", (double)frame/(double)allImageNum*100.0f);
             buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[imagesArr[idx] CGImage] size:size];
             
             if (buffer)
@@ -277,37 +277,49 @@ singleton_implementation(WZZVideoEditManager)
     //此时此刻，这个程序只是打印出了原图的像素信息，但并没有进行任何修改！下面将会教你如何进行修改。
 #else
     //------------------------------------------------------------------------------
-    NSString * str = @"";
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
     
+    UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, image.size.width, 1)];
+    [view addSubview:label];
     UInt32 * currentPixel = pixels;
     for (NSUInteger j = 0; j < cgImageHeight; j++) {
-        for (NSUInteger i = 0; i < cgImageWidth; i++) {
-            // 3.得到当前像素的值赋值给currentPixel并把它的亮度值打印出来
-            UInt32 color = *currentPixel;
-//            printf("%3.0f ",     (R(color)+G(color)+B(color))/3.0);
-            float fff = (R(color)+G(color)+B(color))/3.0f;
-            str = [str stringByAppendingFormat:@"%3.0f ", 255-fff];
-            // 4.增加currentPixel的值，使它指向下一个像素。如果你对指针的运算比较生疏，记住这个：currentPixel是一个指向UInt32的变量，当你把它加1后，它就会向前移动4字节（32位），然后指向了下一个像素的值。
-            currentPixel++;
+        @autoreleasepool {
+            NSString * str = @"";
+            for (NSUInteger i = 0; i < cgImageWidth; i++) {
+                // 3.得到当前像素的值赋值给currentPixel并把它的亮度值打印出来
+                UInt32 color = *currentPixel;
+                //            printf("%3.0f ",     (R(color)+G(color)+B(color))/3.0);
+                float fff = 255-(R(color)+G(color)+B(color))/3.0f;
+//                if (fff > 255/3*2) {
+//                    str = @"@@@";
+//                } else if (fff > 255/3) {
+//                    str = @"OOO";
+//                } else {
+//                    str = @"   ";
+//                }
+//                str = [str stringByAppendingString:str];
+                str = [str stringByAppendingFormat:@"%3.0f ", 255-fff];
+                // 4.增加currentPixel的值，使它指向下一个像素。如果你对指针的运算比较生疏，记住这个：currentPixel是一个指向UInt32的变量，当你把它加1后，它就会向前移动4字节（32位），然后指向了下一个像素的值。
+                currentPixel++;
+            }
+            //        printf("\n\n");
+            UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(label.frame), image.size.width, 2)];
+            [view addSubview:label2];
+            label2.text = str;
+            [label2 setFont:[UIFont systemFontOfSize:0.5]];
+            [label2 sizeToFit];
+            label2.numberOfLines = 1;
+            label = label2;
+            NSLog(@"%lf", (double)j/(double)cgImageHeight*100.0f);
         }
-//        printf("\n\n");
-        NSLog(@"%lf", j/cgImageHeight*100.0f);
-        str = [str stringByAppendingString:@"\n\n"];
     }
-    NSLog(@"%@", str);
-    
-    label.text = str;
-    label.frame = CGRectMake(0, 0, image.size.width*10, image.size.height*10);
-    [label setAdjustsFontSizeToFitWidth:YES];
-    label.numberOfLines = 0;
     
     //截取图片
-    UIGraphicsBeginImageContextWithOptions(label.frame.size, NO, 1.0f);
+    UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, 1.0f);
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
-    [label.layer renderInContext:ctx];
+    [view.layer renderInContext:ctx];
     
     UIImage *imgDraw = UIGraphicsGetImageFromCurrentImageContext();
     
@@ -362,10 +374,10 @@ singleton_implementation(WZZVideoEditManager)
     CGFloat ghostImageAspectRatio = ghostImage.size.width/ghostImage.size.height;
     
     NSInteger targetGhostWidth = faceModel.frame.size.width*1.5;
-//    NSInteger targetGhostWidth = inputWidth;
+    //    NSInteger targetGhostWidth = inputWidth;
     CGSize ghostSize = CGSizeMake(targetGhostWidth, targetGhostWidth/ghostImageAspectRatio);
     CGPoint ghostOrigin = CGPointMake(faceModel.leftEye.x-(faceModel.rightEye.x-faceModel.leftEye.x)/2, 250);
-//    CGPoint ghostOrigin = CGPointMake(inputWidth*0.5, inputHeight*0.2);
+    //    CGPoint ghostOrigin = CGPointMake(inputWidth*0.5, inputHeight*0.2);
     
     //下一步是创建一张幽灵图像的缓存图
     NSUInteger ghostBytesPerRow = bytesPerPixel * ghostSize.width;
@@ -395,7 +407,7 @@ singleton_implementation(WZZVideoEditManager)
             //下一步，添加下面的代码到注释语句 Do some processing here的下面来进行混合：
             
             //你将幽灵图像的每一个像素的透明通道都乘以了0.5，使它成为半透明状态。然后将它混合到图像中像之前讨论的那样
-//            CGFloat ghostAlpha = 0.5f * (A(ghostColor)     / 255.0);
+            //            CGFloat ghostAlpha = 0.5f * (A(ghostColor)     / 255.0);
             CGFloat ghostAlpha = 1.0f * (A(ghostColor) / 255.0);
             UInt32 newR = R(inputColor) * (1 - ghostAlpha) + R(ghostColor) * ghostAlpha;
             UInt32 newG = G(inputColor) * (1 - ghostAlpha) + G(ghostColor) * ghostAlpha;
@@ -409,7 +421,7 @@ singleton_implementation(WZZVideoEditManager)
             *inputPixel = RGBAMake(newR, newG, newB, A(inputColor));
         }
     }
-
+    
     CGImageRef newCGImage = CGBitmapContextCreateImage(context);
     UIImage * processedImage = [UIImage imageWithCGImage:newCGImage];
     //--------------------------------------------------------------------------------
@@ -430,7 +442,7 @@ singleton_implementation(WZZVideoEditManager)
     //得到面部数据
     NSArray* features = [detector featuresInImage:image];
     
-
+    
     NSMutableArray * faceModelArr = [NSMutableArray array];
     //最后的features中就是检测到的全部脸部数据，可以用如下方式计算位置：
     
@@ -463,6 +475,10 @@ singleton_implementation(WZZVideoEditManager)
 
 #pragma mark 合成图像
 - (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2 {
+    return [self remixImageWithBackImage:backImage image2:image2 returnFaceModelBlock:nil];
+}
+
+- (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2 returnFaceModelBlock:(void(^)(WZZFaceModel * faceModel))faceModelBlock {
     //初始化一次imageView
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -479,6 +495,47 @@ singleton_implementation(WZZVideoEditManager)
     CGFloat w = faceModel.frame.size.width;
     CGFloat h = faceModel.frame.size.height;
     [otherImageView setFrame:CGRectMake(x-(x*1.25-x)/2, y-(y*1.25-y)/2, w*1.25, h*1.25)];
+    backImageView.image = backImage;
+    otherImageView.image = image2;
+    
+    if (faceModelBlock) {
+        faceModelBlock(faceModel);
+    }
+    
+    //截取图片
+    UIGraphicsBeginImageContextWithOptions(backImage.size, NO, 1.0f);
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [backImageView.layer renderInContext:ctx];
+    
+    UIImage *imgDraw = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return imgDraw;
+}
+
+//获取图像
+- (UIImage *)remixImageWithBackImage:(UIImage *)backImage image2:(UIImage *)image2 faceRect:(CGRect)rect {
+    //初始化一次imageView
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        backImageView = [[UIImageView alloc] init];
+        otherImageView = [[UIImageView alloc] init];
+        [backImageView addSubview:otherImageView];
+        [backImageView setFrame:CGRectMake(0, 0, backImage.size.width, backImage.size.height)];
+    });
+    
+    CGFloat piix = backImage.size.width/[UIScreen mainScreen].bounds.size.width;
+    
+    
+    //设置脸的位置和图片
+    CGFloat x = rect.origin.x*piix;
+    CGFloat y = rect.origin.y*piix;
+    CGFloat w = rect.size.width*piix;
+    CGFloat h = rect.size.height*piix;
+    [otherImageView setFrame:CGRectMake(x, y, w, h)];
     backImageView.image = backImage;
     otherImageView.image = image2;
     

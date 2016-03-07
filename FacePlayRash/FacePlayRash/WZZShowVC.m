@@ -27,6 +27,18 @@
     imageView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/self.image.size.width*self.image.size.height);
     [imageView setUserInteractionEnabled:YES];
     [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleImage)]];
+    
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.view addSubview:button];
+    [button setFrame:CGRectMake(0, 20, 100, 64)];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [button setTitle:@"返回" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside
+     ];
+}
+
+- (void)backClick {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)handleImage {

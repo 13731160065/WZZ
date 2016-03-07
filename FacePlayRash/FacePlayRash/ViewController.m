@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "WZZVideoEditManager.h"
 #import "WZZShowVC.h"
+#import "WZZEditVideoVC.h"
 
 @interface ViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
@@ -49,7 +50,8 @@
 }
 
 - (void)imgvClick {
-    [self run];
+        WZZEditVideoVC  * edit = [[WZZEditVideoVC alloc] init];
+        [self presentViewController:edit animated:YES completion:nil];
 }
 
 - (void)buttonClick:(UIButton *)button {
