@@ -13,6 +13,8 @@
 #define sourceImageArr @"sourceImageArr"
 #define editImageArr @"editImageArr"
 
+#define zhen 10
+
 @interface WZZEditVideoVC ()
 {
 //    NSMutableArray <UIImage *>* sourceImageArr;
@@ -63,11 +65,48 @@
     
     UIButton * playButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [imageView addSubview:playButton];
-    [playButton setFrame:CGRectMake(50, 70, 50, 30)];
+    [playButton setFrame:CGRectMake(50, 70, 100, 30)];
     [playButton setTitle:@"合成视频" forState:UIControlStateNormal];
     [playButton addTarget:self action:@selector(playButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
+    UIButton * edit10Button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [imageView addSubview:edit10Button];
+    [edit10Button setFrame:CGRectMake(CGRectGetMaxX(nextButton.frame)+50, 70, 100, 30)];
+    [edit10Button setTitle:@"编辑十帧" forState:UIControlStateNormal];
+    [edit10Button addTarget:self action:@selector(edit10ButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    
     [self loadData];
+}
+
+- (void)edit10ButtonClick {
+    //编辑10帧
+    tmpImageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.view addSubview:tmpImageView];
+    //    tmpImageView.image = sourceImageArr[currentImageIdx];
+    tmpImageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
+    tmpImageView.userInteractionEnabled = YES;
+    
+    //退出
+    UIButton * returnButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [tmpImageView addSubview:returnButton];
+    [returnButton setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50, 20, 50, 30)];
+    [returnButton setTitle:@"完成" forState:UIControlStateNormal];
+    [returnButton addTarget:self action:@selector(returnClick:) forControlEvents:UIControlEventTouchUpInside];
+    returnButton.tag = 1000;
+    
+    //    UIImage * image = sourceImageArr[currentImageIdx];
+    UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
+    WZZFaceModel * model = (WZZFaceModel *)sourceFaceArr[currentImageIdx];
+    CGFloat piix = [UIScreen mainScreen].bounds.size.width/image.size.width;
+    CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, model.frame.size.width*piix, model.frame.size.height*piix);
+    
+    tmpFaceImageView = [[UIImageView alloc] initWithFrame:rect];
+    [tmpImageView addSubview:tmpFaceImageView];
+    tmpFaceImageView.userInteractionEnabled = YES;
+    tmpFaceImageView.image = topImage;
+    [tmpFaceImageView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)]];
+    [tmpFaceImageView addGestureRecognizer:[[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotationTapGR:)]];
+    [tmpFaceImageView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchTapGR:)]];
 }
 
 - (void)playButtonClick {
@@ -132,6 +171,22 @@
 }
 
 - (void)returnClick:(UIButton *)button {
+    if (button.tag == 1000) {
+        UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
+        [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx arrName:editImageArr success:nil failed:nil];
+        imageView.image = image;
+        [tmpImageView removeFromSuperview];
+        
+        for (int i = 1; i < zhen; i++) {
+            if (currentImageIdx+i >= [[WZZMutableArray shareWZZMutableArray] countWithName:sourceImageArr]) {
+                return;
+            }
+            UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx+i arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
+            [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx+i arrName:editImageArr success:nil failed:nil];
+        }
+        
+        return;
+    }
 //    UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:sourceImageArr[currentImageIdx] image2:topImage faceRect:tmpFaceImageView.frame];
 //    [editImageArr replaceObjectAtIndex:currentImageIdx withObject:image];
     UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
