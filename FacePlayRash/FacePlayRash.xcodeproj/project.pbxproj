@@ -41,6 +41,7 @@
 		71AE53E71C7F116300AB4ECD /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AE53E61C7F116300AB4ECD /* CoreVideo.framework */; };
 		71AE53E91C7F117000AB4ECD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AE53E81C7F117000AB4ECD /* CoreMedia.framework */; };
 		71AE53EC1C7F154200AB4ECD /* WZZVideoEditManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */; };
+		71BE1C111C9008AB00C08BC6 /* qq.png in Resources */ = {isa = PBXBuildFile; fileRef = 71BE1C101C9008AB00C08BC6 /* qq.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -211,6 +212,7 @@
 		71AE53E81C7F117000AB4ECD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		71AE53EA1C7F154200AB4ECD /* WZZVideoEditManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZVideoEditManager.h; sourceTree = "<group>"; };
 		71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZVideoEditManager.m; sourceTree = "<group>"; };
+		71BE1C101C9008AB00C08BC6 /* qq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qq.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				71385DDD1C8048840051CAA3 /* dog.gif */,
+				71BE1C101C9008AB00C08BC6 /* qq.png */,
 				71AE532B1C7EB7B100AB4ECD /* AppDelegate.h */,
 				71AE532C1C7EB7B100AB4ECD /* AppDelegate.mm */,
 				71AE532E1C7EB7B100AB4ECD /* ViewController.h */,
@@ -642,6 +645,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71BE1C111C9008AB00C08BC6 /* qq.png in Resources */,
 				71AE53381C7EB7B100AB4ECD /* LaunchScreen.storyboard in Resources */,
 				71AE53351C7EB7B100AB4ECD /* Assets.xcassets in Resources */,
 				71385DDE1C8048840051CAA3 /* dog.gif in Resources */,
