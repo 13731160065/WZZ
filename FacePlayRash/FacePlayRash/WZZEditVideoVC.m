@@ -8,11 +8,15 @@
 
 #import "WZZEditVideoVC.h"
 #import "WZZVideoEditManager.h"
+#import "WZZMutableArray.h"
+
+#define sourceImageArr @"sourceImageArr"
+#define editImageArr @"editImageArr"
 
 @interface WZZEditVideoVC ()
 {
-    NSMutableArray <UIImage *>* sourceImageArr;
-    NSMutableArray <UIImage *>* editImageArr;
+//    NSMutableArray <UIImage *>* sourceImageArr;
+//    NSMutableArray <UIImage *>* editImageArr;
     NSMutableArray * sourceFaceArr;
     NSMutableArray * editFaceArr;
     UIImageView * imageView;
@@ -57,13 +61,27 @@
     [nextButton setTitle:@"下一帧" forState:UIControlStateNormal];
     [nextButton addTarget:self action:@selector(nextButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
+    UIButton * playButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [imageView addSubview:playButton];
+    [playButton setFrame:CGRectMake(50, 70, 50, 30)];
+    [playButton setTitle:@"合成视频" forState:UIControlStateNormal];
+    [playButton addTarget:self action:@selector(playButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    
     [self loadData];
+}
+
+- (void)playButtonClick {
+    //预览
+    [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr complete:^{
+        [[WZZMutableArray shareWZZMutableArray] releaseArrWithName:editImageArr success:nil failed:nil];
+    }];
 }
 
 - (void)editClick:(UIButton *)button {
     tmpImageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.view addSubview:tmpImageView];
-    tmpImageView.image = sourceImageArr[currentImageIdx];
+//    tmpImageView.image = sourceImageArr[currentImageIdx];
+    tmpImageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     tmpImageView.userInteractionEnabled = YES;
     
     //退出
@@ -73,7 +91,8 @@
     [returnButton setTitle:@"完成" forState:UIControlStateNormal];
     [returnButton addTarget:self action:@selector(returnClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIImage * image = sourceImageArr[currentImageIdx];
+//    UIImage * image = sourceImageArr[currentImageIdx];
+    UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     WZZFaceModel * model = (WZZFaceModel *)sourceFaceArr[currentImageIdx];
     CGFloat piix = [UIScreen mainScreen].bounds.size.width/image.size.width;
     CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, model.frame.size.width*piix, model.frame.size.height*piix);
@@ -108,12 +127,15 @@
 
 - (void)sliderClick:(UISlider *)aSlider {
     currentImageIdx = (NSInteger)aSlider.value;
-    imageView.image = editImageArr[currentImageIdx];
+//    imageView.image = editImageArr[currentImageIdx];
+    imageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:editImageArr];
 }
 
 - (void)returnClick:(UIButton *)button {
-    UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:sourceImageArr[currentImageIdx] image2:topImage faceRect:tmpFaceImageView.frame];
-    [editImageArr replaceObjectAtIndex:currentImageIdx withObject:image];
+//    UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:sourceImageArr[currentImageIdx] image2:topImage faceRect:tmpFaceImageView.frame];
+//    [editImageArr replaceObjectAtIndex:currentImageIdx withObject:image];
+    UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
+    [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx arrName:editImageArr success:nil failed:nil];
     imageView.image = image;
     [tmpImageView removeFromSuperview];
 }
@@ -127,7 +149,8 @@
 }
 
 - (void)nextButtonClick {
-    if (currentImageIdx < editImageArr.count-1) {
+//    if (currentImageIdx < editImageArr.count-1) {
+    if (currentImageIdx < [[WZZMutableArray shareWZZMutableArray] countWithName:editImageArr]-1) {
         ++currentImageIdx;
         slider.value = currentImageIdx;
         [self sliderClick:slider];
@@ -135,10 +158,13 @@
 }
 
 - (void)loadData {
-    sourceImageArr = [NSMutableArray array];
-    editImageArr = [NSMutableArray array];
+//    sourceImageArr = [NSMutableArray array];
+//    editImageArr = [NSMutableArray array];
     sourceFaceArr = [NSMutableArray array];
     editFaceArr = [NSMutableArray array];
+    
+    [[WZZMutableArray shareWZZMutableArray] arrayWithName:sourceImageArr success:nil failed:nil];
+    [[WZZMutableArray shareWZZMutableArray] arrayWithName:editImageArr success:nil failed:nil];
     
     NSLog(@"开始拆分视频");
     //初始化源图片数组
@@ -147,31 +173,57 @@
     
     [[WZZVideoEditManager sharedWZZVideoEditManager] video2ImagesWithURL:_videoUrl progress:^(NSInteger progress) {
         NSLog(@"%ld", progress);
-    } finishBlock:^(NSMutableArray<UIImage *> *imagesArr) {
-        [sourceImageArr addObjectsFromArray:imagesArr];
+    } finishBlock:^() {
+//        [sourceImageArr addObjectsFromArray:imagesArr];
+        NSInteger inte = [[WZZMutableArray shareWZZMutableArray] countWithName:IMAGESARRAY];
+        for (NSInteger i = 0; i < inte; i++) {
+            @autoreleasepool {
+                [[WZZMutableArray shareWZZMutableArray] addImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:i arrName:IMAGESARRAY] arrName:sourceImageArr success:nil failed:nil];
+            }
+        }
+
+        [[WZZMutableArray shareWZZMutableArray] copyArrayWithSourceArrayName:IMAGESARRAY arrayName:sourceImageArr success:nil failed:nil];
         //初始化遮盖
         topImage = [UIImage imageNamed:@"dog.gif"];
         
         NSLog(@"开始识别人脸");
         //初始化识别后图片数组
-        [sourceImageArr enumerateObjectsUsingBlock:^(UIImage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            double aaa = (double)editImageArr.count/(double)sourceImageArr.count*100.0f;
-            NSLog(@"%lf", aaa);
-            UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:obj image2:topImage returnFaceModelBlock:^(WZZFaceModel *faceModel) {
-                if (!faceModel) {
-                    faceModel = [[WZZFaceModel alloc] init];
+        for (NSInteger i = 0; i < inte; i++) {
+            @autoreleasepool {
+                double aaa = (double)[[WZZMutableArray shareWZZMutableArray] countWithName:editImageArr]/(double)inte*100.0f;
+                NSLog(@"%lf", aaa);
+                UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:i arrName:sourceImageArr] image2:topImage returnFaceModelBlock:^(WZZFaceModel *faceModel) {
+                    if (!faceModel) {
+                        faceModel = [[WZZFaceModel alloc] init];
+                    }
+                    [sourceFaceArr addObject:faceModel];
+                }];
+                if (!image) {
+                    image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:i arrName:sourceImageArr];
                 }
-                [sourceFaceArr addObject:faceModel];
-            }];
-            if (!image) {
-                image = sourceImageArr[idx];
+                [[WZZMutableArray shareWZZMutableArray] addImage:image arrName:editImageArr success:nil failed:nil];
             }
-            [editImageArr addObject:image];
-        }];
+        }
+        //        [sourceImageArr enumerateObjectsUsingBlock:^(UIImage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        //            double aaa = (double)editImageArr.count/(double)sourceImageArr.count*100.0f;
+        //            NSLog(@"%lf", aaa);
+        //            UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:obj image2:topImage returnFaceModelBlock:^(WZZFaceModel *faceModel) {
+        //                if (!faceModel) {
+        //                    faceModel = [[WZZFaceModel alloc] init];
+        //                }
+        //                [sourceFaceArr addObject:faceModel];
+        //            }];
+        //            if (!image) {
+        //                image = sourceImageArr[idx];
+        //            }
+        //            [editImageArr addObject:image];
+        //        }];
         NSLog(@"处理完成");
         dispatch_async(dispatch_get_main_queue(), ^{
-            imageView.image = editImageArr[0];
-            slider.maximumValue = editImageArr.count-1;
+            //            imageView.image = editImageArr[0];
+            //            slider.maximumValue = editImageArr.count-1;
+            imageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:0 arrName:editImageArr];
+            slider.maximumValue = [[WZZMutableArray shareWZZMutableArray] countWithName:editImageArr]-1;
         });
     }];
     

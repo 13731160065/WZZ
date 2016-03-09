@@ -30,6 +30,11 @@
 - (void)arrayWithName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock;
 
 /**
+ 复制数组
+ */
+- (void)copyArrayWithSourceArrayName:(NSString *)sourceName arrayName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock;
+
+/**
  添加图片
  */
 - (void)addImage:(UIImage *)image arrName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock;
@@ -79,7 +84,7 @@
 /**
  释放数组
  */
-- (void)releaseArrWithName:(NSString *)name;
+- (void)releaseArrWithName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock;
 
 /**
  数组元素数量

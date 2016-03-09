@@ -11,18 +11,25 @@
 #import "Singleton.h"
 @class WZZFaceModel;
 
+#define IMAGESARRAY @"wzz"
+
 @interface WZZVideoEditManager : NSObject
 singleton_interface(WZZVideoEditManager)
 
 /**
  视频转图片
  */
-- (void)video2ImagesWithURL:(NSURL *)url progress:(void(^)(NSInteger progress))progressBlock finishBlock:(void(^)(NSMutableArray <UIImage *>* imagesArr))finishBlock;
+- (void)video2ImagesWithURL:(NSURL *)url progress:(void(^)(NSInteger progress))progressBlock finishBlock:(void(^)())finishBlock;
 
 /**
  图片转视频
  */
 - (void)images2VideoWithImageArr:(NSMutableArray <UIImage *>*)imagesArr;
+
+/**
+ 本地图片转视频
+ */
+- (void)images2VideoWithImageArrName:(NSString *)imageArrName complete:(void(^)())completeBlock ;
 
 /**
  !!!处理图片转为8进制打印，这个方法一般不用

@@ -129,7 +129,20 @@ static WZZMutableArray *_instance;
 
 //删除表
 - (void)releaseArrWithName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock {
-    if ([_fmdb executeUpdate:[NSString stringWithFormat:@"drop table %@", name]]) {
+    if ([_fmdb executeUpdate:[NSString stringWithFormat:@"drop table %@;", name]]) {
+        if (successBlock) {
+            successBlock();
+        }
+    } else {
+        if (failedBlock) {
+            failedBlock();
+        }
+    }
+}
+
+//复制表
+- (void)copyArrayWithSourceArrayName:(NSString *)sourceName arrayName:(NSString *)name success:(void (^)())successBlock failed:(void (^)())failedBlock {
+    if ([_fmdb executeQuery:[NSString stringWithFormat:@"create table %@ as select * from %@;", name, sourceName]]) {
         if (successBlock) {
             successBlock();
         }

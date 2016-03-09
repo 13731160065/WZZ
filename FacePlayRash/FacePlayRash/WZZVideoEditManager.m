@@ -7,6 +7,8 @@
 //
 
 #import "WZZVideoEditManager.h"
+#import "WZZMutableArray.h"
+
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
 #define ZHEN 20
@@ -19,7 +21,7 @@
 
 @interface WZZVideoEditManager()
 {
-    NSMutableArray * imagesArray;
+//    NSMutableArray * imagesArray;
     NSInteger currentImageNum;
     NSInteger allImageNum;
     long long _currentZhen;
@@ -38,92 +40,96 @@ singleton_implementation(WZZVideoEditManager)
 
 
 #pragma mark - 视频拆帧
-- (void)video2ImagesWithURL:(NSURL *)url progress:(void(^)(NSInteger))progressBlock finishBlock:(void(^)(NSMutableArray <UIImage *>*))finishBlock {
-    imagesArray = [NSMutableArray array];
-    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
-    
-    AVURLAsset *Asset = [[AVURLAsset alloc] initWithURL:url options:opts];
-    
-    AVAssetExportSession *session = [[AVAssetExportSession alloc] initWithAsset:Asset     presetName:AVAssetExportPresetLowQuality];
-    session.outputURL = url;
-    session.outputFileType = AVFileTypeMPEG4;
-    
-    [session exportAsynchronouslyWithCompletionHandler:^(void)
-     {
-         
-         AVAsset * myAsset = session.asset;
-         //转换结束
-         //         AVURLAsset *myAsset = [[AVURLAsset alloc] initWithURL:url options:opts];
-         //----------------------------------------------------------------
-         float second = 0.0f;
-         //    value为  总帧数，timescale为  fps
-         second = myAsset.duration.value / myAsset.duration.timescale; // 获取视频总时长,单位秒
-         _currentZhen = myAsset.duration.timescale;
-         NSLog(@"%lld", _currentZhen);
-         self.myImageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:myAsset];
-         
-         self.myImageGenerator.appliesPreferredTrackTransform = YES;
-         //解决 时间不准确问题
-         self.myImageGenerator.requestedTimeToleranceBefore = kCMTimeZero;
-         self.myImageGenerator.requestedTimeToleranceAfter = kCMTimeZero;
-         
-         
-         // 获取视频总时长,单位秒
-         Float64 durationSeconds = CMTimeGetSeconds([myAsset duration]);
-         
-         NSLog(@"%f~!~!~!~",durationSeconds);
-         
-         NSMutableArray * timeArr = [NSMutableArray array];
-         //15*40=600
-         //每秒帧数
-         int32_t zhen = ZHEN;
-         
-         allImageNum = durationSeconds*zhen;
-         currentImageNum = 0;
-         
-         //i是每帧的秒数
-         for (int i = 0; i < allImageNum; i++) {
-             CMTime time = CMTimeMake(i*10, ZHEN*10);
-             [timeArr addObject:[NSValue valueWithCMTime:time]];
-         }
-         
-         //    myImageGenertor  必须为strong
-         [self.myImageGenerator generateCGImagesAsynchronouslyForTimes:timeArr
-                                                     completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime,
-                                                                         AVAssetImageGeneratorResult result, NSError *error) {
-                                                         CFBridgingRelease(CMTimeCopyDescription(NULL, requestedTime));
-                                                         CFBridgingRelease(CMTimeCopyDescription(NULL, actualTime));
-                                                         
-                                                         if (result == AVAssetImageGeneratorSucceeded) {
-                                                             // Do something interesting with the image.
-                                                             @autoreleasepool {
-                                                                 UIImage * image1 = [UIImage imageWithCGImage:image];
-                                                                 [imagesArray addObject:image1];
-                                                             }
-                                                             currentImageNum++;
-                                                             double aaa = (double)currentImageNum/(double)allImageNum*100.0f;
-                                                             NSInteger progress = (NSInteger)aaa;
-                                                             if (progressBlock) {
-                                                                 progressBlock(progress);
-                                                             }
-                                                             if (currentImageNum == allImageNum) {
-                                                                 if (finishBlock) {
-                                                                     finishBlock(imagesArray);
+- (void)video2ImagesWithURL:(NSURL *)url progress:(void(^)(NSInteger))progressBlock finishBlock:(void(^)())finishBlock {
+//    imagesArray = [NSMutableArray array];
+    [[WZZMutableArray shareWZZMutableArray] arrayWithName:IMAGESARRAY success:^{
+        NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                         forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+        
+        AVURLAsset *Asset = [[AVURLAsset alloc] initWithURL:url options:opts];
+        
+        AVAssetExportSession *session = [[AVAssetExportSession alloc] initWithAsset:Asset     presetName:AVAssetExportPresetLowQuality];
+        session.outputURL = url;
+        session.outputFileType = AVFileTypeMPEG4;
+        
+        [session exportAsynchronouslyWithCompletionHandler:^(void)
+         {
+             
+             AVAsset * myAsset = session.asset;
+             //转换结束
+             //         AVURLAsset *myAsset = [[AVURLAsset alloc] initWithURL:url options:opts];
+             //----------------------------------------------------------------
+             float second = 0.0f;
+             //    value为  总帧数，timescale为  fps
+             second = myAsset.duration.value / myAsset.duration.timescale; // 获取视频总时长,单位秒
+             _currentZhen = myAsset.duration.timescale;
+             NSLog(@"%lld", _currentZhen);
+             self.myImageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:myAsset];
+             
+             self.myImageGenerator.appliesPreferredTrackTransform = YES;
+             //解决 时间不准确问题
+             self.myImageGenerator.requestedTimeToleranceBefore = kCMTimeZero;
+             self.myImageGenerator.requestedTimeToleranceAfter = kCMTimeZero;
+             
+             
+             // 获取视频总时长,单位秒
+             Float64 durationSeconds = CMTimeGetSeconds([myAsset duration]);
+             
+             NSLog(@"%f~!~!~!~",durationSeconds);
+             
+             NSMutableArray * timeArr = [NSMutableArray array];
+             //15*40=600
+             //每秒帧数
+             int32_t zhen = ZHEN;
+             
+             allImageNum = durationSeconds*zhen;
+             currentImageNum = 0;
+             
+             //i是每帧的秒数
+             for (int i = 0; i < allImageNum; i++) {
+                 CMTime time = CMTimeMake(i*10, ZHEN*10);
+                 [timeArr addObject:[NSValue valueWithCMTime:time]];
+             }
+             
+             //    myImageGenertor  必须为strong
+             [self.myImageGenerator generateCGImagesAsynchronouslyForTimes:timeArr
+                                                         completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime,
+                                                                             AVAssetImageGeneratorResult result, NSError *error) {
+                                                             CFBridgingRelease(CMTimeCopyDescription(NULL, requestedTime));
+                                                             CFBridgingRelease(CMTimeCopyDescription(NULL, actualTime));
+                                                             
+                                                             if (result == AVAssetImageGeneratorSucceeded) {
+                                                                 // Do something interesting with the image.
+                                                                 @autoreleasepool {
+                                                                     UIImage * image1 = [UIImage imageWithCGImage:image];
+                                                                     [[WZZMutableArray shareWZZMutableArray] addImage:image1 arrName:IMAGESARRAY success:nil failed:nil];
+                                                                 }
+                                                                 currentImageNum++;
+                                                                 double aaa = (double)currentImageNum/(double)allImageNum*100.0f;
+                                                                 NSInteger progress = (NSInteger)aaa;
+                                                                 if (progressBlock) {
+                                                                     progressBlock(progress);
+                                                                 }
+                                                                 if (currentImageNum == allImageNum) {
+                                                                     if (finishBlock) {
+                                                                         finishBlock();
+                                                                     }
                                                                  }
                                                              }
-                                                         }
-                                                         
-                                                         if (result == AVAssetImageGeneratorFailed) {
-                                                             NSLog(@"Failed with error: %@", [error localizedDescription]);
-                                                         }
-                                                         if (result == AVAssetImageGeneratorCancelled) {
-                                                             NSLog(@"Canceled");
-                                                         }
-                                                     }];
-         
-         //-------------------------------------------------------
-     }];
+                                                             
+                                                             if (result == AVAssetImageGeneratorFailed) {
+                                                                 NSLog(@"Failed with error: %@", [error localizedDescription]);
+                                                             }
+                                                             if (result == AVAssetImageGeneratorCancelled) {
+                                                                 NSLog(@"Canceled");
+                                                             }
+                                                         }];
+             
+             //-------------------------------------------------------
+         }];
+    } failed:^{
+    }];
+    
 }
 
 #pragma mark - 帧转视频
@@ -214,6 +220,79 @@ singleton_implementation(WZZVideoEditManager)
             int idx = frame;
             NSLog(@"%lf()", (double)frame/(double)allImageNum*100.0f);
             buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[imagesArr[idx] CGImage] size:size];
+            
+            if (buffer)
+            {
+                if(![adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(frame*10, ZHEN*10)])
+                    NSLog(@"FAIL");
+                else
+                    CFRelease(buffer);
+            }
+            
+        }
+    }];
+}
+
+- (void)images2VideoWithImageArrName:(NSString *)imageArrName complete:(void(^)())completeBlock {
+    CGSize size = [[[WZZMutableArray shareWZZMutableArray] imageWithIndex:0 arrName:imageArrName] size];//定义视频的大小
+    
+    NSError *error = nil;
+    
+    //—-initialize compression engine
+    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Documents/aaa.mp4", NSHomeDirectory()]]
+                                                           fileType:AVFileTypeMPEG4
+                                                              error:&error];
+    NSParameterAssert(videoWriter);
+    if(error)
+        NSLog(@"error = %@", [error localizedDescription]);
+    
+    NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:AVVideoCodecH264, AVVideoCodecKey,
+                                   [NSNumber numberWithInt:size.width], AVVideoWidthKey,
+                                   [NSNumber numberWithInt:size.height], AVVideoHeightKey, nil];
+    AVAssetWriterInput *writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
+    
+    NSDictionary *sourcePixelBufferAttributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:kCVPixelFormatType_32ARGB], kCVPixelBufferPixelFormatTypeKey, nil];
+    
+    AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor
+                                                     assetWriterInputPixelBufferAdaptorWithAssetWriterInput:writerInput sourcePixelBufferAttributes:sourcePixelBufferAttributesDictionary];
+    NSParameterAssert(writerInput);
+    NSParameterAssert([videoWriter canAddInput:writerInput]);
+    
+    if ([videoWriter canAddInput:writerInput])
+        NSLog(@" ");
+    else
+        NSLog(@" ");
+    
+    [videoWriter addInput:writerInput];
+    
+    [videoWriter startWriting];
+    [videoWriter startSessionAtSourceTime:kCMTimeZero];
+    
+    //合成多张图片为一个视频文件
+    dispatch_queue_t dispatchQueue = dispatch_queue_create("mediaInputQueue", NULL);
+    int __block frame = 0;
+    
+    [writerInput requestMediaDataWhenReadyOnQueue:dispatchQueue usingBlock:^{
+        while ([writerInput isReadyForMoreMediaData])
+        {
+            if(++frame >= allImageNum)
+            {
+                [writerInput markAsFinished];
+                [videoWriter finishWritingWithCompletionHandler:^{
+                    //结束合成
+                    NSLog(@"OK");
+                    if (completeBlock) {
+                        completeBlock();
+                    }
+                }];
+                break;
+            }
+            
+            CVPixelBufferRef buffer = NULL;
+            
+            int idx = frame;
+            NSLog(@"%lf", (double)frame/(double)allImageNum*100.0f);
+            buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[[[WZZMutableArray shareWZZMutableArray] imageWithIndex:idx arrName:imageArrName] CGImage] size:size];
             
             if (buffer)
             {
