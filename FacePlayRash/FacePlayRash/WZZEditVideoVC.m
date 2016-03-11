@@ -13,9 +13,7 @@
 #define sourceImageArr @"sourceImageArr"
 #define editImageArr @"editImageArr"
 
-#define zhen 10
-
-@interface WZZEditVideoVC ()
+@interface WZZEditVideoVC ()<UITextFieldDelegate>
 {
 //    NSMutableArray <UIImage *>* sourceImageArr;
 //    NSMutableArray <UIImage *>* editImageArr;
@@ -28,6 +26,9 @@
     UIImage * topImage;
     UIImageView * tmpImageView;
     UIImageView * tmpFaceImageView;
+    NSInteger zhen;
+    UIButton * edit10Button;
+    UITextField * textField10;
 }
 
 @end
@@ -40,6 +41,8 @@
     imageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.view addSubview:imageView];
     imageView.userInteractionEnabled = YES;
+    
+    zhen = 10;
     
     slider = [[UISlider alloc] initWithFrame:CGRectMake(50, [UIScreen mainScreen].bounds.size.height-50, [UIScreen mainScreen].bounds.size.width-100, 10)];
     [imageView addSubview:slider];
@@ -69,13 +72,39 @@
     [playButton setTitle:@"合成视频" forState:UIControlStateNormal];
     [playButton addTarget:self action:@selector(playButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton * edit10Button = [UIButton buttonWithType:UIButtonTypeSystem];
+    edit10Button = [UIButton buttonWithType:UIButtonTypeSystem];
     [imageView addSubview:edit10Button];
-    [edit10Button setFrame:CGRectMake(CGRectGetMaxX(nextButton.frame)+50, 70, 100, 30)];
-    [edit10Button setTitle:@"编辑十帧" forState:UIControlStateNormal];
+    [edit10Button setFrame:CGRectMake(CGRectGetMaxX(nextButton.frame), 70, 100, 30)];
+    [edit10Button setTitle:@"编辑10帧" forState:UIControlStateNormal];
     [edit10Button addTarget:self action:@selector(edit10ButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
+    textField10 = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(nextButton.frame), 70+50, 100, 30)];
+    [imageView addSubview:textField10];
+    textField10.delegate = self;
+    [textField10 setBackgroundColor:[UIColor cyanColor]];
+    
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [imageView addSubview:backButton];
+    [backButton setFrame:CGRectMake(50, 70+50, 100, 30)];
+    [backButton setTitle:@"返回" forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    
     [self loadData];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    zhen = [textField10.text integerValue];
+    [edit10Button setTitle:[NSString stringWithFormat:@"编辑%ld帧", zhen] forState:UIControlStateNormal];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [textField10 resignFirstResponder];
+}
+
+- (void)backButtonClick {
+    [[WZZMutableArray shareWZZMutableArray] releaseAllArr];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)edit10ButtonClick {

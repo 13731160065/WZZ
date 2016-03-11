@@ -153,4 +153,10 @@ static WZZMutableArray *_instance;
     }
 }
 
+//删除数据库
+- (void)releaseAllArr {
+    NSFileManager * manager = [NSFileManager defaultManager];
+    [manager removeItemAtPath:[NSHomeDirectory() stringByAppendingString:@"/Documents/wzzmutablearr.db"] error:nil];
+}
+
 @end

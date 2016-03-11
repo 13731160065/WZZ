@@ -91,4 +91,9 @@
  */
 - (NSInteger)countWithName:(NSString *)name;
 
+/**
+ 释放所有数组
+ */
+- (void)releaseAllArr;
+
 @end
