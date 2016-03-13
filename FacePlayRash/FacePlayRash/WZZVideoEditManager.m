@@ -352,7 +352,6 @@ singleton_implementation(WZZVideoEditManager)
         }
         printf("\n\n");
     }
-    
     //此时此刻，这个程序只是打印出了原图的像素信息，但并没有进行任何修改！下面将会教你如何进行修改。
 #else
     //------------------------------------------------------------------------------
@@ -377,7 +376,7 @@ singleton_implementation(WZZVideoEditManager)
 //                    str = @"   ";
 //                }
 //                str = [str stringByAppendingString:str];
-                str = [str stringByAppendingFormat:@"%3.0f ", 255-fff];
+                str = [str stringByAppendingFormat:@"%3.0f ", fff];
                 // 4.增加currentPixel的值，使它指向下一个像素。如果你对指针的运算比较生疏，记住这个：currentPixel是一个指向UInt32的变量，当你把它加1后，它就会向前移动4字节（32位），然后指向了下一个像素的值。
                 currentPixel++;
             }

@@ -106,7 +106,7 @@
         NSLog(@"%@", imagesArr);
         imgv.animationImages = imagesArr;
         [imagesArr enumerateObjectsUsingBlock:^(UIImage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [imagesArr replaceObjectAtIndex:idx withObject:[[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:obj image2:[UIImage imageNamed:@"dog.gif"]]];
+            [imagesArr replaceObjectAtIndex:idx withObject:[[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:obj image2:[UIImage imageNamed:@"myface.png"]]];
             //            [imagesArr replaceObjectAtIndex:idx withObject:[[WZZVideoEditManager sharedWZZVideoEditManager] processImage:obj faceModel:[[WZZVideoEditManager sharedWZZVideoEditManager] getOriginWithImage:obj]]];
         }];
         [imgv startAnimating];

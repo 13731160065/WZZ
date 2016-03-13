@@ -8,6 +8,15 @@
 
 #import "WZZMutableArray.h"
 
+#define DEFAULTARR_videoArr @""
+
+@interface WZZMutableArray ()
+{
+    NSMutableArray <NSString *>* tableNameArr;
+}
+
+@end
+
 @implementation WZZMutableArray
 
 #pragma mark - 单利
@@ -30,6 +39,7 @@ static WZZMutableArray *_instance;
         _instance = [[WZZMutableArray alloc] init];
         _instance.fmdb = [FMDatabase databaseWithPath:[NSHomeDirectory() stringByAppendingString:@"/Documents/wzzmutablearr.db"]];
         [_instance.fmdb open];
+        _instance->tableNameArr = [NSMutableArray array];
     }
     return _instance;
 }
@@ -114,6 +124,7 @@ static WZZMutableArray *_instance;
     if ([_fmdb executeUpdate:[NSString stringWithFormat:@"create table if not exists %@(idx integer primary key, obj blob);", name]]) {
         //成功
         NSLog(@"创建表成功");
+        [tableNameArr addObject:name];
         if (successBlock) {
             successBlock();
         }
@@ -153,10 +164,19 @@ static WZZMutableArray *_instance;
     }
 }
 
-//删除数据库
 - (void)releaseAllArr {
-    NSFileManager * manager = [NSFileManager defaultManager];
-    [manager removeItemAtPath:[NSHomeDirectory() stringByAppendingString:@"/Documents/wzzmutablearr.db"] error:nil];
+    [tableNameArr enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![obj isEqualToString:DEFAULTARR_videoArr]) {
+            [self releaseArrWithName:obj success:nil failed:nil];
+        }
+    }];
+    [tableNameArr removeAllObjects];
 }
+
+//删除数据库
+//- (void)deleteAllArr {
+//    NSFileManager * manager = [NSFileManager defaultManager];
+//    [manager removeItemAtPath:[NSHomeDirectory() stringByAppendingString:@"/Documents/wzzmutablearr.db"] error:nil];
+//}
 
 @end

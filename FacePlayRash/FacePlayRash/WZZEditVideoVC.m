@@ -24,6 +24,7 @@
     UIButton * editButton;
     NSInteger currentImageIdx;
     UIImage * topImage;
+    UIView * tmpView;
     UIImageView * tmpImageView;
     UIImageView * tmpFaceImageView;
     NSInteger zhen;
@@ -45,46 +46,46 @@
     zhen = 10;
     
     slider = [[UISlider alloc] initWithFrame:CGRectMake(50, [UIScreen mainScreen].bounds.size.height-50, [UIScreen mainScreen].bounds.size.width-100, 10)];
-    [imageView addSubview:slider];
+    [self.view addSubview:slider];
     [slider addTarget:self action:@selector(sliderClick:) forControlEvents:UIControlEventValueChanged];
 
     editButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [imageView addSubview:editButton];
+    [self.view addSubview:editButton];
     [editButton setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50, 20, 50, 30)];
     [editButton setTitle:@"编辑" forState:UIControlStateNormal];
     [editButton addTarget:self action:@selector(editClick:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * lastButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [imageView addSubview:lastButton];
+    [self.view addSubview:lastButton];
     [lastButton setFrame:CGRectMake(50, 20, 50, 30)];
     [lastButton setTitle:@"上一帧" forState:UIControlStateNormal];
     [lastButton addTarget:self action:@selector(lastButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [imageView addSubview:nextButton];
+    [self.view addSubview:nextButton];
     [nextButton setFrame:CGRectMake(CGRectGetMaxX(lastButton.frame)+50, 20, 50, 30)];
     [nextButton setTitle:@"下一帧" forState:UIControlStateNormal];
     [nextButton addTarget:self action:@selector(nextButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * playButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [imageView addSubview:playButton];
+    [self.view addSubview:playButton];
     [playButton setFrame:CGRectMake(50, 70, 100, 30)];
     [playButton setTitle:@"合成视频" forState:UIControlStateNormal];
     [playButton addTarget:self action:@selector(playButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
     edit10Button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [imageView addSubview:edit10Button];
+    [self.view addSubview:edit10Button];
     [edit10Button setFrame:CGRectMake(CGRectGetMaxX(nextButton.frame), 70, 100, 30)];
     [edit10Button setTitle:@"编辑10帧" forState:UIControlStateNormal];
     [edit10Button addTarget:self action:@selector(edit10ButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
     textField10 = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(nextButton.frame), 70+50, 100, 30)];
-    [imageView addSubview:textField10];
+    [self.view addSubview:textField10];
     textField10.delegate = self;
     [textField10 setBackgroundColor:[UIColor cyanColor]];
     
     UIButton * backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [imageView addSubview:backButton];
+    [self.view addSubview:backButton];
     [backButton setFrame:CGRectMake(50, 70+50, 100, 30)];
     [backButton setTitle:@"返回" forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
@@ -108,16 +109,23 @@
 }
 
 - (void)edit10ButtonClick {
+    tmpView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.view addSubview:tmpView];
+    [tmpView setBackgroundColor:[UIColor whiteColor]];
+    
     //编辑10帧
-    tmpImageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    [self.view addSubview:tmpImageView];
+    tmpImageView = [[UIImageView alloc] initWithFrame:imageView.frame];
+    [tmpView addSubview:tmpImageView];
     //    tmpImageView.image = sourceImageArr[currentImageIdx];
     tmpImageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     tmpImageView.userInteractionEnabled = YES;
+    [tmpImageView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)]];
+    [tmpImageView addGestureRecognizer:[[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotationTapGR:)]];
+    [tmpImageView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchTapGR:)]];
     
     //退出
     UIButton * returnButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [tmpImageView addSubview:returnButton];
+    [tmpView addSubview:returnButton];
     [returnButton setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50, 20, 50, 30)];
     [returnButton setTitle:@"完成" forState:UIControlStateNormal];
     [returnButton addTarget:self action:@selector(returnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -146,15 +154,23 @@
 }
 
 - (void)editClick:(UIButton *)button {
-    tmpImageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    [self.view addSubview:tmpImageView];
-//    tmpImageView.image = sourceImageArr[currentImageIdx];
+    tmpView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.view addSubview:tmpView];
+    [tmpView setBackgroundColor:[UIColor whiteColor]];
+    
+    //编辑10帧
+    tmpImageView = [[UIImageView alloc] initWithFrame:imageView.frame];
+    [tmpView addSubview:tmpImageView];
+    //    tmpImageView.image = sourceImageArr[currentImageIdx];
     tmpImageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     tmpImageView.userInteractionEnabled = YES;
+    [tmpImageView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)]];
+    [tmpImageView addGestureRecognizer:[[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotationTapGR:)]];
+    [tmpImageView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchTapGR:)]];
     
     //退出
     UIButton * returnButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [tmpImageView addSubview:returnButton];
+    [tmpView addSubview:returnButton];
     [returnButton setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50, 20, 50, 30)];
     [returnButton setTitle:@"完成" forState:UIControlStateNormal];
     [returnButton addTarget:self action:@selector(returnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -204,7 +220,6 @@
         UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
         [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx arrName:editImageArr success:nil failed:nil];
         imageView.image = image;
-        [tmpImageView removeFromSuperview];
         
         for (int i = 1; i < zhen; i++) {
             if (currentImageIdx+i >= [[WZZMutableArray shareWZZMutableArray] countWithName:sourceImageArr]) {
@@ -213,6 +228,7 @@
             UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx+i arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
             [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx+i arrName:editImageArr success:nil failed:nil];
         }
+        [tmpView removeFromSuperview];
         
         return;
     }
@@ -221,7 +237,7 @@
     UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
     [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx arrName:editImageArr success:nil failed:nil];
     imageView.image = image;
-    [tmpImageView removeFromSuperview];
+    [tmpView removeFromSuperview];
 }
 
 - (void)lastButtonClick {
@@ -268,7 +284,7 @@
 
         [[WZZMutableArray shareWZZMutableArray] copyArrayWithSourceArrayName:IMAGESARRAY arrayName:sourceImageArr success:nil failed:nil];
         //初始化遮盖
-        topImage = [UIImage imageNamed:@"dog.gif"];
+        topImage = [UIImage imageNamed:@"myface.png"];
         
         NSLog(@"开始识别人脸");
         //初始化识别后图片数组
@@ -306,7 +322,9 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             //            imageView.image = editImageArr[0];
             //            slider.maximumValue = editImageArr.count-1;
-            imageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:0 arrName:editImageArr];
+            UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:0 arrName:editImageArr];
+            imageView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height/2-[UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height/2, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height);
+            imageView.image = image;
             slider.maximumValue = [[WZZMutableArray shareWZZMutableArray] countWithName:editImageArr]-1;
         });
     }];
