@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7123EF4D1C9566A60024B13E /* face.png in Resources */ = {isa = PBXBuildFile; fileRef = 7123EF4C1C9566A60024B13E /* face.png */; };
 		71385DDE1C8048840051CAA3 /* dog.gif in Resources */ = {isa = PBXBuildFile; fileRef = 71385DDD1C8048840051CAA3 /* dog.gif */; };
 		719CE7D51C8703AE00ED142E /* WZZShowVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 719CE7D41C8703AE00ED142E /* WZZShowVC.m */; };
 		71A254191C8D6FD900D4CFF5 /* WZZMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A254181C8D6FD900D4CFF5 /* WZZMutableArray.m */; };
@@ -62,6 +63,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7123EF4C1C9566A60024B13E /* face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face.png; sourceTree = "<group>"; };
 		71385DD81C7FF2A90051CAA3 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		71385DDD1C8048840051CAA3 /* dog.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dog.gif; sourceTree = "<group>"; };
 		719CE7D31C8703AE00ED142E /* WZZShowVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZShowVC.h; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 			children = (
 				71385DDD1C8048840051CAA3 /* dog.gif */,
 				71BE1C101C9008AB00C08BC6 /* qq.png */,
+				7123EF4C1C9566A60024B13E /* face.png */,
 				71AE532B1C7EB7B100AB4ECD /* AppDelegate.h */,
 				71AE532C1C7EB7B100AB4ECD /* AppDelegate.mm */,
 				71AE532E1C7EB7B100AB4ECD /* ViewController.h */,
@@ -647,6 +650,7 @@
 			files = (
 				71BE1C111C9008AB00C08BC6 /* qq.png in Resources */,
 				71AE53381C7EB7B100AB4ECD /* LaunchScreen.storyboard in Resources */,
+				7123EF4D1C9566A60024B13E /* face.png in Resources */,
 				71AE53351C7EB7B100AB4ECD /* Assets.xcassets in Resources */,
 				71385DDE1C8048840051CAA3 /* dog.gif in Resources */,
 				71AE53331C7EB7B100AB4ECD /* Main.storyboard in Resources */,

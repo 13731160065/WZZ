@@ -574,8 +574,8 @@ singleton_implementation(WZZVideoEditManager)
     CGFloat x = faceModel.frame.origin.x;
     CGFloat y = faceModel.frame.origin.y;
     CGFloat w = faceModel.frame.size.width;
-    CGFloat h = faceModel.frame.size.height;
-    [otherImageView setFrame:CGRectMake(x-(x*1.25-x)/2, y-(y*1.25-y)/2, w*1.25, h*1.25)];
+    CGFloat h = w/image2.size.width*image2.size.height;
+    [otherImageView setFrame:CGRectMake(x, y, w, h)];
     backImageView.image = backImage;
     otherImageView.image = image2;
     

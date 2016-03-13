@@ -135,7 +135,9 @@
     UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     WZZFaceModel * model = (WZZFaceModel *)sourceFaceArr[currentImageIdx];
     CGFloat piix = [UIScreen mainScreen].bounds.size.width/image.size.width;
-    CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, model.frame.size.width*piix, model.frame.size.height*piix);
+    CGFloat w = model.frame.size.width;
+    CGFloat h = w/topImage.size.width*topImage.size.height;
+    CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, w*piix, h*piix);
     
     tmpFaceImageView = [[UIImageView alloc] initWithFrame:rect];
     [tmpImageView addSubview:tmpFaceImageView];
@@ -179,7 +181,9 @@
     UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     WZZFaceModel * model = (WZZFaceModel *)sourceFaceArr[currentImageIdx];
     CGFloat piix = [UIScreen mainScreen].bounds.size.width/image.size.width;
-    CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, model.frame.size.width*piix, model.frame.size.height*piix);
+    CGFloat w = model.frame.size.width;
+    CGFloat h = w/topImage.size.width*topImage.size.height;
+    CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, w*piix, h*piix);
     
     tmpFaceImageView = [[UIImageView alloc] initWithFrame:rect];
     [tmpImageView addSubview:tmpFaceImageView];
@@ -284,7 +288,7 @@
 
         [[WZZMutableArray shareWZZMutableArray] copyArrayWithSourceArrayName:IMAGESARRAY arrayName:sourceImageArr success:nil failed:nil];
         //初始化遮盖
-        topImage = [UIImage imageNamed:@"myface.png"];
+        topImage = [UIImage imageNamed:@"face.png"];
         
         NSLog(@"开始识别人脸");
         //初始化识别后图片数组
