@@ -36,6 +36,7 @@
 
 @implementation WZZEditVideoVC
 
+//视图加载
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -94,20 +95,24 @@
     [self loadData];
 }
 
+//输入框代理
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     zhen = [textField10.text integerValue];
     [edit10Button setTitle:[NSString stringWithFormat:@"编辑%ld帧", zhen] forState:UIControlStateNormal];
 }
 
+//输入框结束
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [textField10 resignFirstResponder];
 }
 
+//返回
 - (void)backButtonClick {
     [[WZZMutableArray shareWZZMutableArray] releaseAllArr];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+//编辑十帧
 - (void)edit10ButtonClick {
     tmpView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.view addSubview:tmpView];
@@ -131,6 +136,13 @@
     [returnButton addTarget:self action:@selector(returnClick:) forControlEvents:UIControlEventTouchUpInside];
     returnButton.tag = 1000;
     
+    //插入头像
+    UIButton * insertFaceButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [tmpView addSubview:insertFaceButton];
+    [insertFaceButton setFrame:CGRectMake(0, 20, 50, 30)];
+    [insertFaceButton setTitle:@"添加" forState:UIControlStateNormal];
+    [insertFaceButton addTarget:self action:@selector(insertFaceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
     //    UIImage * image = sourceImageArr[currentImageIdx];
     UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     WZZFaceModel * model = (WZZFaceModel *)sourceFaceArr[currentImageIdx];
@@ -148,19 +160,25 @@
     [tmpFaceImageView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchTapGR:)]];
 }
 
+//合成视频
 - (void)playButtonClick {
     //预览
-    [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr complete:^{
-        [[WZZMutableArray shareWZZMutableArray] releaseArrWithName:editImageArr success:nil failed:nil];
+    [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr complete:^(NSURL *okURL) {
+        
+        [[WZZVideoEditManager sharedWZZVideoEditManager] remixVideoAndAudioWithVideoURL:okURL audioURL:_videoUrl fileName:@"aaa" complete:^(NSURL *okURL) {
+            [[WZZMutableArray shareWZZMutableArray] releaseArrWithName:editImageArr success:nil failed:nil];
+        }];
+        
     }];
 }
 
+//编辑
 - (void)editClick:(UIButton *)button {
     tmpView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.view addSubview:tmpView];
     [tmpView setBackgroundColor:[UIColor whiteColor]];
     
-    //编辑10帧
+    //编辑
     tmpImageView = [[UIImageView alloc] initWithFrame:imageView.frame];
     [tmpView addSubview:tmpImageView];
     //    tmpImageView.image = sourceImageArr[currentImageIdx];
@@ -177,6 +195,13 @@
     [returnButton setTitle:@"完成" forState:UIControlStateNormal];
     [returnButton addTarget:self action:@selector(returnClick:) forControlEvents:UIControlEventTouchUpInside];
     
+    //插入头像
+    UIButton * insertFaceButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [tmpView addSubview:insertFaceButton];
+    [insertFaceButton setFrame:CGRectMake(0, 20, 50, 30)];
+    [insertFaceButton setTitle:@"添加" forState:UIControlStateNormal];
+    [insertFaceButton addTarget:self action:@selector(insertFaceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
 //    UIImage * image = sourceImageArr[currentImageIdx];
     UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
     WZZFaceModel * model = (WZZFaceModel *)sourceFaceArr[currentImageIdx];
@@ -192,18 +217,42 @@
     [tmpFaceImageView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)]];
     [tmpFaceImageView addGestureRecognizer:[[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotationTapGR:)]];
     [tmpFaceImageView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchTapGR:)]];
+    [tmpFaceImageView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longGR:)]];
 }
 
+//添加头像
+- (void)insertFaceButtonClick:(UIButton *)btn {
+    //添加
+    [tmpFaceImageView removeFromSuperview];
+    tmpFaceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/4, [UIScreen mainScreen].bounds.size.width/4/topImage.size.width*topImage.size.height)];
+    [tmpFaceImageView setCenter:tmpImageView.center];
+    [tmpFaceImageView setImage:topImage];
+    [tmpFaceImageView setUserInteractionEnabled:YES];
+    [tmpImageView addSubview:tmpFaceImageView];
+    [tmpFaceImageView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)]];
+    [tmpFaceImageView addGestureRecognizer:[[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotationTapGR:)]];
+    [tmpFaceImageView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchTapGR:)]];
+    [tmpFaceImageView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longGR:)]];
+}
+
+//长按删除
+- (void)longGR:(UILongPressGestureRecognizer *)tap {
+    [tmpFaceImageView removeFromSuperview];
+}
+
+//捏合
 - (void)pinchTapGR:(UIPinchGestureRecognizer *)tap{
     tap.view.transform = CGAffineTransformScale(tap.view.transform, tap.scale, tap.scale);
     tap.scale = 1.0;//以上一次的缩放比例为准
 }
 
+//旋转
 - (void)rotationTapGR:(UIRotationGestureRecognizer *)tap{
     tap.view.transform = CGAffineTransformRotate(tap.view.transform, tap.rotation);
     tap.rotation = 0;//清空上次旋转的角度
 }
 
+//拖拽
 - (void)panImage:(UIPanGestureRecognizer *)pan {
     CGPoint point = [pan translationInView:pan.view];
     CGPoint tempCenter = pan.view.center;
@@ -213,12 +262,14 @@
     [pan setTranslation:CGPointMake(0, 0) inView:pan.view];
 }
 
+//进度条事件
 - (void)sliderClick:(UISlider *)aSlider {
     currentImageIdx = (NSInteger)aSlider.value;
 //    imageView.image = editImageArr[currentImageIdx];
     imageView.image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:editImageArr];
 }
 
+//完成编辑
 - (void)returnClick:(UIButton *)button {
     if (button.tag == 1000) {
         UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
@@ -244,6 +295,7 @@
     [tmpView removeFromSuperview];
 }
 
+//下一页
 - (void)lastButtonClick {
     if (currentImageIdx > 0) {
         --currentImageIdx;
@@ -252,6 +304,7 @@
     }
 }
 
+//上一页
 - (void)nextButtonClick {
 //    if (currentImageIdx < editImageArr.count-1) {
     if (currentImageIdx < [[WZZMutableArray shareWZZMutableArray] countWithName:editImageArr]-1) {
@@ -261,6 +314,7 @@
     }
 }
 
+//加载数据
 - (void)loadData {
 //    sourceImageArr = [NSMutableArray array];
 //    editImageArr = [NSMutableArray array];
@@ -285,7 +339,7 @@
                 [[WZZMutableArray shareWZZMutableArray] addImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:i arrName:IMAGESARRAY] arrName:sourceImageArr success:nil failed:nil];
             }
         }
-
+        
         [[WZZMutableArray shareWZZMutableArray] copyArrayWithSourceArrayName:IMAGESARRAY arrayName:sourceImageArr success:nil failed:nil];
         //初始化遮盖
         topImage = [UIImage imageNamed:@"face.png"];
@@ -323,6 +377,7 @@
         //            [editImageArr addObject:image];
         //        }];
         NSLog(@"处理完成");
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             //            imageView.image = editImageArr[0];
             //            slider.maximumValue = editImageArr.count-1;
@@ -332,7 +387,6 @@
             slider.maximumValue = [[WZZMutableArray shareWZZMutableArray] countWithName:editImageArr]-1;
         });
     }];
-    
     
 }
 

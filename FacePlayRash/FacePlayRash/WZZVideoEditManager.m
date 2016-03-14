@@ -233,13 +233,15 @@ singleton_implementation(WZZVideoEditManager)
     }];
 }
 
-- (void)images2VideoWithImageArrName:(NSString *)imageArrName complete:(void(^)())completeBlock {
+- (void)images2VideoWithImageArrName:(NSString *)imageArrName complete:(void(^)(NSURL * okURL))completeBlock {
     CGSize size = [[[WZZMutableArray shareWZZMutableArray] imageWithIndex:0 arrName:imageArrName] size];//定义视频的大小
     
     NSError *error = nil;
     
+    NSURL * outURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Documents/aaa.mp4", NSHomeDirectory()]];
+    
     //—-initialize compression engine
-    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Documents/aaa.mp4", NSHomeDirectory()]]
+    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:outURL
                                                            fileType:AVFileTypeMPEG4
                                                               error:&error];
     NSParameterAssert(videoWriter);
@@ -282,7 +284,7 @@ singleton_implementation(WZZVideoEditManager)
                     //结束合成
                     NSLog(@"OK");
                     if (completeBlock) {
-                        completeBlock();
+                        completeBlock(outURL);
                     }
                 }];
                 break;
@@ -632,6 +634,79 @@ singleton_implementation(WZZVideoEditManager)
     UIGraphicsEndImageContext();
     
     return imgDraw;
+}
+
+//!!!获取视频中的音频
+- (void)getAudioFromVideoWithVideoURL:(NSURL *)url audioName:(NSString *)name complete:(void(^)(NSURL * okURL))completeBlock {
+    AVURLAsset * videoAsset = [[AVURLAsset alloc] initWithURL:url options:nil];
+    AVAssetExportSession* _assetExport = [[AVAssetExportSession alloc] initWithAsset:videoAsset
+                                                                          presetName:AVAssetExportPresetPassthrough];
+    
+    NSString* videoName = [name stringByAppendingString:@".m4a"];
+    
+    NSString *exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:videoName];
+    NSURL    *exportUrl = [NSURL fileURLWithPath:exportPath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:exportPath])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:exportPath error:nil];
+    }
+    
+    _assetExport.outputFileType = AVFileTypeAppleM4A;
+    _assetExport.outputURL = exportUrl;
+    _assetExport.shouldOptimizeForNetworkUse = YES;
+    
+    [_assetExport exportAsynchronouslyWithCompletionHandler:^{
+        //完成
+        if (completeBlock) {
+            completeBlock(_assetExport.outputURL);
+        }
+    }];
+}
+
+//混合视频音频(音频url直接传源视频url)
+- (void)remixVideoAndAudioWithVideoURL:(NSURL *)videoURL audioURL:(NSURL *)audioURL fileName:(NSString *)name complete:(void(^)(NSURL * okURL))completeBlock {
+    AVURLAsset* audioAsset = [[AVURLAsset alloc]initWithURL:audioURL options:nil];
+    AVURLAsset* videoAsset = [[AVURLAsset alloc]initWithURL:videoURL options:nil];
+    
+    AVMutableComposition* mixComposition = [AVMutableComposition composition];
+    
+    AVMutableCompositionTrack *compositionCommentaryTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio
+                                                                                        preferredTrackID:kCMPersistentTrackID_Invalid];
+    [compositionCommentaryTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration)
+                                        ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0]
+                                         atTime:kCMTimeZero error:nil];
+    
+    AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo
+                                                                                   preferredTrackID:kCMPersistentTrackID_Invalid];
+    [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
+                                   ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0]
+                                    atTime:kCMTimeZero error:nil];
+    
+    AVAssetExportSession* _assetExport = [[AVAssetExportSession alloc] initWithAsset:mixComposition
+                                                                          presetName:AVAssetExportPresetPassthrough];
+    
+    NSString* videoName = [name stringByAppendingString:@".mp4"];
+    
+    NSString *exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:videoName];
+    NSURL    *exportUrl = [NSURL fileURLWithPath:exportPath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:exportPath])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:exportPath error:nil];
+    }
+    
+    _assetExport.outputFileType = AVFileTypeMPEG4;
+    NSLog(@"file type %@",_assetExport.outputFileType);
+    _assetExport.outputURL = exportUrl;
+    _assetExport.shouldOptimizeForNetworkUse = YES;
+    
+    [_assetExport exportAsynchronouslyWithCompletionHandler:^{
+        //完成
+        if (completeBlock) {
+            completeBlock(_assetExport.outputURL);
+        }
+    }];
 }
 
 @end
