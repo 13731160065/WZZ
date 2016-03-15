@@ -145,13 +145,14 @@
     
     //    UIImage * image = sourceImageArr[currentImageIdx];
     UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
-    WZZFaceModel * model = (WZZFaceModel *)sourceFaceArr[currentImageIdx];
+    WZZFaceModel * model = (WZZFaceModel *)editFaceArr[currentImageIdx];
     CGFloat piix = [UIScreen mainScreen].bounds.size.width/image.size.width;
     CGFloat w = model.frame.size.width;
     CGFloat h = w/topImage.size.width*topImage.size.height;
-    CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, w*piix, h*piix);
+    WZZFaceModel * faceModel = (WZZFaceModel *)editFaceArr[currentImageIdx];
+    [faceModel setFrame:CGRectMake(faceModel.frame.origin.x, faceModel.frame.origin.y, w, h)];
     
-    tmpFaceImageView = [[UIImageView alloc] initWithFrame:rect];
+    tmpFaceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(faceModel.frame.origin.x*piix, faceModel.frame.origin.y*piix, w*piix, h*piix)];
     [tmpImageView addSubview:tmpFaceImageView];
     tmpFaceImageView.userInteractionEnabled = YES;
     tmpFaceImageView.image = topImage;
@@ -160,9 +161,30 @@
     [tmpFaceImageView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchTapGR:)]];
 }
 
+//数组转json
+- (NSString*)arrayToJson:(NSArray *)array {
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:0 error:&parseError];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
 //合成视频
 - (void)playButtonClick {
     //预览
+    NSMutableArray * uploadArr = [NSMutableArray array];
+    [editFaceArr enumerateObjectsUsingBlock:^(WZZFaceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSMutableDictionary * mutiDic = [NSMutableDictionary dictionary];
+        [mutiDic setObject:[NSNumber numberWithInteger:idx] forKey:@"index"];
+        [mutiDic setObject:[NSNumber numberWithDouble:obj.frame.origin.x] forKey:@"x"];
+        [mutiDic setObject:[NSNumber numberWithDouble:obj.frame.origin.y] forKey:@"y"];
+        [mutiDic setObject:[NSNumber numberWithDouble:obj.frame.size.width] forKey:@"width"];
+        [mutiDic setObject:[NSNumber numberWithDouble:obj.frame.size.height] forKey:@"height"];
+        [uploadArr addObject:mutiDic];
+    }];
+    
+    NSString * uploadStr = [self arrayToJson:uploadArr];
+    NSLog(@"%@", uploadStr);
+    
     [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr complete:^(NSURL *okURL) {
         
         [[WZZVideoEditManager sharedWZZVideoEditManager] remixVideoAndAudioWithVideoURL:okURL audioURL:_videoUrl fileName:@"aaa" complete:^(NSURL *okURL) {
@@ -208,9 +230,10 @@
     CGFloat piix = [UIScreen mainScreen].bounds.size.width/image.size.width;
     CGFloat w = model.frame.size.width;
     CGFloat h = w/topImage.size.width*topImage.size.height;
-    CGRect rect = CGRectMake(model.frame.origin.x*piix, model.frame.origin.y*piix, w*piix, h*piix);
+    WZZFaceModel * faceModel = (WZZFaceModel *)editFaceArr[currentImageIdx];
+    [faceModel setFrame:CGRectMake(faceModel.frame.origin.x, faceModel.frame.origin.y, w, h)];
     
-    tmpFaceImageView = [[UIImageView alloc] initWithFrame:rect];
+    tmpFaceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(faceModel.frame.origin.x*piix, faceModel.frame.origin.y*piix, w*piix, h*piix)];
     [tmpImageView addSubview:tmpFaceImageView];
     tmpFaceImageView.userInteractionEnabled = YES;
     tmpFaceImageView.image = topImage;
@@ -271,8 +294,13 @@
 
 //完成编辑
 - (void)returnClick:(UIButton *)button {
+    
+    UIImage * tmpImage = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr];
+    CGFloat piix = tmpImage.size.width/[UIScreen mainScreen].bounds.size.width;
+    WZZFaceModel * faceModel = editFaceArr[currentImageIdx];
+    [faceModel setFrame:CGRectMake(tmpFaceImageView.frame.origin.x*piix, tmpFaceImageView.frame.origin.y*piix, tmpFaceImageView.frame.size.width*piix, tmpFaceImageView.frame.size.height*piix)];
     if (button.tag == 1000) {
-        UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
+        UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:tmpImage image2:topImage faceRect:tmpFaceImageView.frame];
         [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx arrName:editImageArr success:nil failed:nil];
         imageView.image = image;
         
@@ -289,7 +317,7 @@
     }
 //    UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:sourceImageArr[currentImageIdx] image2:topImage faceRect:tmpFaceImageView.frame];
 //    [editImageArr replaceObjectAtIndex:currentImageIdx withObject:image];
-    UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:sourceImageArr] image2:topImage faceRect:tmpFaceImageView.frame];
+    UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:tmpImage image2:topImage faceRect:tmpFaceImageView.frame];
     [[WZZMutableArray shareWZZMutableArray] replacementImage:image atIndex:currentImageIdx arrName:editImageArr success:nil failed:nil];
     imageView.image = image;
     [tmpView removeFromSuperview];
@@ -376,6 +404,8 @@
         //            }
         //            [editImageArr addObject:image];
         //        }];
+        [editFaceArr removeAllObjects];
+        [editFaceArr addObjectsFromArray:sourceFaceArr];
         NSLog(@"处理完成");
         
         dispatch_async(dispatch_get_main_queue(), ^{

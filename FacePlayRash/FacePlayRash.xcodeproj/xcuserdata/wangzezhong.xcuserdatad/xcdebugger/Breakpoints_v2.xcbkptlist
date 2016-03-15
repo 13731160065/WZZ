@@ -13,5 +13,53 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FacePlayRash/WZZEditVideoVC.m"
+            timestampString = "479703996.893874"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "-playButtonClick"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[WZZEditVideoVC playButtonClick]"
+                  moduleName = "FacePlayRash"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wangzezhong/Desktop/github/trunk/FacePlayRash/FacePlayRash/WZZEditVideoVC.m"
+                  timestampString = "479707241.666586"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "288">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__33-[WZZEditVideoVC playButtonClick]_block_invoke158"
+                  moduleName = "FacePlayRash"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wangzezhong/Desktop/github/trunk/FacePlayRash/FacePlayRash/WZZEditVideoVC.m"
+                  timestampString = "479707241.666891"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "56">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

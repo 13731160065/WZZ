@@ -642,10 +642,10 @@ singleton_implementation(WZZVideoEditManager)
     AVAssetExportSession* _assetExport = [[AVAssetExportSession alloc] initWithAsset:videoAsset
                                                                           presetName:AVAssetExportPresetPassthrough];
     
-    NSString* videoName = [name stringByAppendingString:@".m4a"];
+    NSString * videoName = [name stringByAppendingString:@".m4a"];
     
-    NSString *exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:videoName];
-    NSURL    *exportUrl = [NSURL fileURLWithPath:exportPath];
+    NSString * exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:videoName];
+    NSURL    * exportUrl = [NSURL fileURLWithPath:exportPath];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:exportPath])
     {
