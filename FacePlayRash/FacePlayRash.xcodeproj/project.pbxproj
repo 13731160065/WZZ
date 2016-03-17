@@ -42,6 +42,7 @@
 		71AE53E71C7F116300AB4ECD /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AE53E61C7F116300AB4ECD /* CoreVideo.framework */; };
 		71AE53E91C7F117000AB4ECD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71AE53E81C7F117000AB4ECD /* CoreMedia.framework */; };
 		71AE53EC1C7F154200AB4ECD /* WZZVideoEditManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */; };
+		71B9C2FB1C9832CE0012FBF0 /* WZZPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B9C2FA1C9832CE0012FBF0 /* WZZPlayerManager.m */; };
 		71BE1C111C9008AB00C08BC6 /* qq.png in Resources */ = {isa = PBXBuildFile; fileRef = 71BE1C101C9008AB00C08BC6 /* qq.png */; };
 /* End PBXBuildFile section */
 
@@ -214,6 +215,8 @@
 		71AE53E81C7F117000AB4ECD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		71AE53EA1C7F154200AB4ECD /* WZZVideoEditManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZVideoEditManager.h; sourceTree = "<group>"; };
 		71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZVideoEditManager.m; sourceTree = "<group>"; };
+		71B9C2F91C9832CE0012FBF0 /* WZZPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZPlayerManager.h; sourceTree = "<group>"; };
+		71B9C2FA1C9832CE0012FBF0 /* WZZPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZPlayerManager.m; sourceTree = "<group>"; };
 		71BE1C101C9008AB00C08BC6 /* qq.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qq.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -318,6 +321,8 @@
 				71AE532C1C7EB7B100AB4ECD /* AppDelegate.mm */,
 				71AE532E1C7EB7B100AB4ECD /* ViewController.h */,
 				71AE532F1C7EB7B100AB4ECD /* ViewController.m */,
+				71B9C2F91C9832CE0012FBF0 /* WZZPlayerManager.h */,
+				71B9C2FA1C9832CE0012FBF0 /* WZZPlayerManager.m */,
 				71ADD7A31C8911E3002E7331 /* WZZEditVideoVC.h */,
 				71ADD7A41C8911E3002E7331 /* WZZEditVideoVC.m */,
 				719CE7D31C8703AE00ED142E /* WZZShowVC.h */,
@@ -681,6 +686,7 @@
 				71AE53301C7EB7B100AB4ECD /* ViewController.m in Sources */,
 				71A254191C8D6FD900D4CFF5 /* WZZMutableArray.m in Sources */,
 				71AE532D1C7EB7B100AB4ECD /* AppDelegate.mm in Sources */,
+				71B9C2FB1C9832CE0012FBF0 /* WZZPlayerManager.m in Sources */,
 				719CE7D51C8703AE00ED142E /* WZZShowVC.m in Sources */,
 				71AE532A1C7EB7B100AB4ECD /* main.m in Sources */,
 				71A254271C8D717300D4CFF5 /* FMDatabaseAdditions.m in Sources */,

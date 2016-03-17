@@ -52,18 +52,22 @@ static WZZMutableArray *_instance;
 #pragma mark - 操作数据
 //添加一个图片
 - (void)addImage:(UIImage *)image arrName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock {
-    NSData * data = UIImagePNGRepresentation(image);
-    if ([_fmdb executeUpdate:[NSString stringWithFormat:@"insert into %@(obj) values(?);", name], data]) {
-        //成功
-        NSLog(@"插入成功");
-        if (successBlock) {
-            successBlock();
-        }
-    } else {
-        //失败
-        NSLog(@"插入失败");
-        if (failedBlock) {
-            failedBlock();
+    @autoreleasepool {
+        
+        NSData * data = UIImageJPEGRepresentation(image, 0.5f);
+
+        if ([_fmdb executeUpdate:[NSString stringWithFormat:@"insert into %@(obj) values(?);", name], data]) {
+            //成功
+            NSLog(@"插入成功");
+            if (successBlock) {
+                successBlock();
+            }
+        } else {
+            //失败
+            NSLog(@"插入失败");
+            if (failedBlock) {
+                failedBlock();
+            }
         }
     }
 }

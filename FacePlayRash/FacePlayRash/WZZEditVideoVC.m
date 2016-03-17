@@ -9,6 +9,7 @@
 #import "WZZEditVideoVC.h"
 #import "WZZVideoEditManager.h"
 #import "WZZMutableArray.h"
+#import "WZZPlayerManager.h"
 
 #define sourceImageArr @"sourceImageArr"
 #define editImageArr @"editImageArr"
@@ -186,7 +187,7 @@
     NSLog(@"%@", uploadStr);
     
     [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr complete:^(NSURL *okURL) {
-        
+        [WZZPlayerManager playMovieWithURLString:[NSString stringWithFormat:@"%@", okURL] presentVC:self];
         [[WZZVideoEditManager sharedWZZVideoEditManager] remixVideoAndAudioWithVideoURL:okURL audioURL:_videoUrl fileName:@"aaa" complete:^(NSURL *okURL) {
             [[WZZMutableArray shareWZZMutableArray] releaseArrWithName:editImageArr success:nil failed:nil];
         }];
@@ -260,7 +261,9 @@
 
 //长按删除
 - (void)longGR:(UILongPressGestureRecognizer *)tap {
+    [[editFaceArr objectAtIndex:currentImageIdx] setFrame:CGRectZero];
     [tmpFaceImageView removeFromSuperview];
+    [tmpFaceImageView setFrame:CGRectZero];
 }
 
 //捏合

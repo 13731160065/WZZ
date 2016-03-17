@@ -21,7 +21,7 @@
 
 @interface WZZVideoEditManager()
 {
-//    NSMutableArray * imagesArray;
+    //    NSMutableArray * imagesArray;
     NSInteger currentImageNum;
     NSInteger allImageNum;
     long long _currentZhen;
@@ -41,7 +41,7 @@ singleton_implementation(WZZVideoEditManager)
 
 #pragma mark - 视频拆帧
 - (void)video2ImagesWithURL:(NSURL *)url progress:(void(^)(NSInteger))progressBlock finishBlock:(void(^)())finishBlock {
-//    imagesArray = [NSMutableArray array];
+    //    imagesArray = [NSMutableArray array];
     [[WZZMutableArray shareWZZMutableArray] arrayWithName:IMAGESARRAY success:^{
         NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
                                                          forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
@@ -78,11 +78,9 @@ singleton_implementation(WZZVideoEditManager)
              NSLog(@"%f~!~!~!~",durationSeconds);
              
              NSMutableArray * timeArr = [NSMutableArray array];
-             //15*40=600
-             //每秒帧数
-             int32_t zhen = ZHEN;
+             //30*20 = 600;
              
-             allImageNum = durationSeconds*zhen;
+             allImageNum = durationSeconds*ZHEN;
              currentImageNum = 0;
              
              //i是每帧的秒数
@@ -92,14 +90,14 @@ singleton_implementation(WZZVideoEditManager)
              }
              
              //    myImageGenertor  必须为strong
+             
              [self.myImageGenerator generateCGImagesAsynchronouslyForTimes:timeArr
-                                                         completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime,
+                                                         completionHandler:^(CMTime  requestedTime, CGImageRef image, CMTime actualTime,
                                                                              AVAssetImageGeneratorResult result, NSError *error) {
                                                              CFBridgingRelease(CMTimeCopyDescription(NULL, requestedTime));
                                                              CFBridgingRelease(CMTimeCopyDescription(NULL, actualTime));
                                                              
                                                              if (result == AVAssetImageGeneratorSucceeded) {
-                                                                 // Do something interesting with the image.
                                                                  @autoreleasepool {
                                                                      UIImage * image1 = [UIImage imageWithCGImage:image];
                                                                      [[WZZMutableArray shareWZZMutableArray] addImage:image1 arrName:IMAGESARRAY success:nil failed:nil];
@@ -124,7 +122,6 @@ singleton_implementation(WZZVideoEditManager)
                                                                  NSLog(@"Canceled");
                                                              }
                                                          }];
-             
              //-------------------------------------------------------
          }];
     } failed:^{
@@ -370,14 +367,14 @@ singleton_implementation(WZZVideoEditManager)
                 UInt32 color = *currentPixel;
                 //            printf("%3.0f ",     (R(color)+G(color)+B(color))/3.0);
                 float fff = 255-(R(color)+G(color)+B(color))/3.0f;
-//                if (fff > 255/3*2) {
-//                    str = @"@@@";
-//                } else if (fff > 255/3) {
-//                    str = @"OOO";
-//                } else {
-//                    str = @"   ";
-//                }
-//                str = [str stringByAppendingString:str];
+                //                if (fff > 255/3*2) {
+                //                    str = @"@@@";
+                //                } else if (fff > 255/3) {
+                //                    str = @"OOO";
+                //                } else {
+                //                    str = @"   ";
+                //                }
+                //                str = [str stringByAppendingString:str];
                 str = [str stringByAppendingFormat:@"%3.0f ", fff];
                 // 4.增加currentPixel的值，使它指向下一个像素。如果你对指针的运算比较生疏，记住这个：currentPixel是一个指向UInt32的变量，当你把它加1后，它就会向前移动4字节（32位），然后指向了下一个像素的值。
                 currentPixel++;
