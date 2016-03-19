@@ -230,7 +230,7 @@ singleton_implementation(WZZVideoEditManager)
     }];
 }
 
-- (void)images2VideoWithImageArrName:(NSString *)imageArrName complete:(void(^)(NSURL * okURL))completeBlock {
+- (void)images2VideoWithImageArrName:(NSString *)imageArrName progress:(void (^)(double))progressBlock complete:(void (^)(NSURL *))completeBlock {
     CGSize size = [[[WZZMutableArray shareWZZMutableArray] imageWithIndex:0 arrName:imageArrName] size];//定义视频的大小
     
     NSError *error = nil;
@@ -274,6 +274,7 @@ singleton_implementation(WZZVideoEditManager)
     [writerInput requestMediaDataWhenReadyOnQueue:dispatchQueue usingBlock:^{
         while ([writerInput isReadyForMoreMediaData])
         {
+            
             if(++frame >= allImageNum)
             {
                 [writerInput markAsFinished];
@@ -290,7 +291,10 @@ singleton_implementation(WZZVideoEditManager)
             CVPixelBufferRef buffer = NULL;
             
             int idx = frame;
-            NSLog(@"%lf", (double)frame/(double)allImageNum*100.0f);
+            double aaa = (double)frame/(double)allImageNum*100.0f;
+            if (progressBlock) {
+                progressBlock(aaa);
+            }
             buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[[[WZZMutableArray shareWZZMutableArray] imageWithIndex:idx arrName:imageArrName] CGImage] size:size];
             
             if (buffer)
@@ -704,6 +708,14 @@ singleton_implementation(WZZVideoEditManager)
             completeBlock(_assetExport.outputURL);
         }
     }];
+}
+
+- (void)removeAllTmp {
+    [[WZZMutableArray shareWZZMutableArray] releaseAllArr];
+    NSFileManager * manager = [NSFileManager defaultManager];
+    [manager removeItemAtPath:[NSHomeDirectory() stringByAppendingString:@"/tmp"] error:nil];
+    [manager createDirectoryAtPath:[NSHomeDirectory() stringByAppendingString:@"/tmp"] withIntermediateDirectories:NO attributes:nil error:nil];
+    [manager removeItemAtPath:[NSHomeDirectory() stringByAppendingString:@"/Documents/aaa.mp4"] error:nil];
 }
 
 @end

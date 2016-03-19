@@ -29,7 +29,7 @@ singleton_interface(WZZVideoEditManager)
 /**
  本地图片转视频
  */
-- (void)images2VideoWithImageArrName:(NSString *)imageArrName complete:(void(^)(NSURL * okURL))completeBlock;
+- (void)images2VideoWithImageArrName:(NSString *)imageArrName progress:(void(^)(double progress))progressBlock complete:(void(^)(NSURL * okURL))completeBlock;
 
 /**
  !!!处理图片转为8进制打印，这个方法一般不用
@@ -70,6 +70,11 @@ singleton_interface(WZZVideoEditManager)
  获取视频中的音频
  */
 - (void)getAudioFromVideoWithVideoURL:(NSURL *)url audioName:(NSString *)name complete:(void(^)(NSURL * okURL))completeBlock;
+
+/**
+ 删除所有缓存
+ */
+- (void)removeAllTmp;
 
 @end
 

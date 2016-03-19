@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "WZZMutableArray.h"
+#import "WZZVideoEditManager.h"
 
 @interface AppDelegate ()
 
@@ -21,6 +22,11 @@
     [WZZMutableArray setup];
     
     return YES;
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    //程序即将结束
+    [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {

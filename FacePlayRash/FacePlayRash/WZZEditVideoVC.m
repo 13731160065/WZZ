@@ -81,10 +81,18 @@
     [edit10Button setTitle:@"编辑10帧" forState:UIControlStateNormal];
     [edit10Button addTarget:self action:@selector(edit10ButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
-    textField10 = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(nextButton.frame), 70+50, 100, 30)];
+    textField10 = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(nextButton.frame)-50, 70+50, 100, 30)];
     [self.view addSubview:textField10];
     textField10.delegate = self;
     [textField10 setBackgroundColor:[UIColor cyanColor]];
+    [textField10 setKeyboardType:UIKeyboardTypeNumberPad];
+    
+    UIButton * okokButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [okokButton setFrame:CGRectMake(CGRectGetMaxX(textField10.frame), textField10.frame.origin.y, 50, textField10.frame.size.height)];
+    [self.view addSubview:okokButton];
+    [okokButton addTarget:self action:@selector(resigTF) forControlEvents:UIControlEventTouchUpInside];
+    [okokButton setTitle:@"确定" forState:UIControlStateNormal];
+    
     
     UIButton * backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.view addSubview:backButton];
@@ -96,20 +104,19 @@
     [self loadData];
 }
 
+- (void)resigTF {
+    [textField10 resignFirstResponder];
+}
+
 //输入框代理
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     zhen = [textField10.text integerValue];
     [edit10Button setTitle:[NSString stringWithFormat:@"编辑%ld帧", zhen] forState:UIControlStateNormal];
 }
 
-//输入框结束
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [textField10 resignFirstResponder];
-}
-
 //返回
 - (void)backButtonClick {
-    [[WZZMutableArray shareWZZMutableArray] releaseAllArr];
+    [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -186,10 +193,16 @@
     NSString * uploadStr = [self arrayToJson:uploadArr];
     NSLog(@"%@", uploadStr);
     
-    [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr complete:^(NSURL *okURL) {
-        [WZZPlayerManager playMovieWithURLString:[NSString stringWithFormat:@"%@", okURL] presentVC:self];
+    MBProgressHUD * hud = [MBProgressHUD showMessage:@"合成视频:0%%%"];
+    [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr progress:^(double progress) {
+        [hud setLabelText:[NSString stringWithFormat:@"合成视频:%.0lf%%", progress]];
+    } complete:^(NSURL *okURL) {
+        [hud setLabelText:@"请稍等"];
         [[WZZVideoEditManager sharedWZZVideoEditManager] remixVideoAndAudioWithVideoURL:okURL audioURL:_videoUrl fileName:@"aaa" complete:^(NSURL *okURL) {
-            [[WZZMutableArray shareWZZMutableArray] releaseArrWithName:editImageArr success:nil failed:nil];
+            [hud setLabelText:@"处理完成"];
+            [hud hide:YES];
+            [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
+            [self dismissViewControllerAnimated:YES completion:nil];
         }];
         
     }];
@@ -328,6 +341,10 @@
 
 //下一页
 - (void)lastButtonClick {
+    
+    
+    
+    
     if (currentImageIdx > 0) {
         --currentImageIdx;
         slider.value = currentImageIdx;
@@ -352,21 +369,22 @@
     sourceFaceArr = [NSMutableArray array];
     editFaceArr = [NSMutableArray array];
     
+    MBProgressHUD * hud = [MBProgressHUD showMessage:@"1/3解析视频:0%%"];
+
     [[WZZMutableArray shareWZZMutableArray] arrayWithName:sourceImageArr success:nil failed:nil];
     [[WZZMutableArray shareWZZMutableArray] arrayWithName:editImageArr success:nil failed:nil];
     
     NSLog(@"开始拆分视频");
-    //初始化源图片数组
-    NSString *urlAsString = [NSString stringWithFormat:@"%@/Documents/asdf.m4v", NSHomeDirectory()];
-    NSURL    *url = [NSURL fileURLWithPath:urlAsString];
     
     [[WZZVideoEditManager sharedWZZVideoEditManager] video2ImagesWithURL:_videoUrl progress:^(NSInteger progress) {
         NSLog(@"%ld", progress);
+        hud.labelText = [NSString stringWithFormat:@"1/3解析视频:%ld%%", progress];
     } finishBlock:^() {
-//        [sourceImageArr addObjectsFromArray:imagesArr];
         NSInteger inte = [[WZZMutableArray shareWZZMutableArray] countWithName:IMAGESARRAY];
         for (NSInteger i = 0; i < inte; i++) {
             @autoreleasepool {
+                double aaa = (double)i/(double)inte*100.0f;
+                hud.labelText = [NSString stringWithFormat:@"2/3面部识别:%.0lf%%", aaa];
                 [[WZZMutableArray shareWZZMutableArray] addImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:i arrName:IMAGESARRAY] arrName:sourceImageArr success:nil failed:nil];
             }
         }
@@ -379,8 +397,8 @@
         //初始化识别后图片数组
         for (NSInteger i = 0; i < inte; i++) {
             @autoreleasepool {
-                double aaa = (double)[[WZZMutableArray shareWZZMutableArray] countWithName:editImageArr]/(double)inte*100.0f;
-                NSLog(@"%lf", aaa);
+                double aaa = (double)i/(double)inte*100.0f;
+                hud.labelText = [NSString stringWithFormat:@"3/3处理视频:%.0lf%%", aaa];
                 UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:[[WZZMutableArray shareWZZMutableArray] imageWithIndex:i arrName:sourceImageArr] image2:topImage returnFaceModelBlock:^(WZZFaceModel *faceModel) {
                     if (!faceModel) {
                         faceModel = [[WZZFaceModel alloc] init];
@@ -393,27 +411,12 @@
                 [[WZZMutableArray shareWZZMutableArray] addImage:image arrName:editImageArr success:nil failed:nil];
             }
         }
-        //        [sourceImageArr enumerateObjectsUsingBlock:^(UIImage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        //            double aaa = (double)editImageArr.count/(double)sourceImageArr.count*100.0f;
-        //            NSLog(@"%lf", aaa);
-        //            UIImage * image = [[WZZVideoEditManager sharedWZZVideoEditManager] remixImageWithBackImage:obj image2:topImage returnFaceModelBlock:^(WZZFaceModel *faceModel) {
-        //                if (!faceModel) {
-        //                    faceModel = [[WZZFaceModel alloc] init];
-        //                }
-        //                [sourceFaceArr addObject:faceModel];
-        //            }];
-        //            if (!image) {
-        //                image = sourceImageArr[idx];
-        //            }
-        //            [editImageArr addObject:image];
-        //        }];
         [editFaceArr removeAllObjects];
         [editFaceArr addObjectsFromArray:sourceFaceArr];
         NSLog(@"处理完成");
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            //            imageView.image = editImageArr[0];
-            //            slider.maximumValue = editImageArr.count-1;
+            [hud hide:YES];
             UIImage * image = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:0 arrName:editImageArr];
             imageView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height/2-[UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height/2, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height);
             imageView.image = image;
