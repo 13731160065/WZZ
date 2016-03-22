@@ -24,7 +24,10 @@
     //    NSMutableArray * imagesArray;
     NSInteger currentImageNum;
     NSInteger allImageNum;
-    long long _currentZhen;
+    Float64 allTime;
+    NSInteger allDuan;
+    NSInteger currentDuan;
+    NSMutableArray * allAV;
     
     //临时全局变量
     UIImageView * backImageView;
@@ -48,85 +51,141 @@ singleton_implementation(WZZVideoEditManager)
         
         AVURLAsset *Asset = [[AVURLAsset alloc] initWithURL:url options:opts];
         
-        AVAssetExportSession *session = [[AVAssetExportSession alloc] initWithAsset:Asset     presetName:AVAssetExportPresetLowQuality];
-        session.outputURL = url;
-        session.outputFileType = AVFileTypeMPEG4;
         
-        [session exportAsynchronouslyWithCompletionHandler:^(void)
-         {
-             
-             AVAsset * myAsset = session.asset;
-             //转换结束
-             //         AVURLAsset *myAsset = [[AVURLAsset alloc] initWithURL:url options:opts];
-             //----------------------------------------------------------------
-             float second = 0.0f;
-             //    value为  总帧数，timescale为  fps
-             second = myAsset.duration.value / myAsset.duration.timescale; // 获取视频总时长,单位秒
-             _currentZhen = myAsset.duration.timescale;
-             NSLog(@"%lld", _currentZhen);
-             self.myImageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:myAsset];
-             
-             self.myImageGenerator.appliesPreferredTrackTransform = YES;
-             //解决 时间不准确问题
-             self.myImageGenerator.requestedTimeToleranceBefore = kCMTimeZero;
-             self.myImageGenerator.requestedTimeToleranceAfter = kCMTimeZero;
-             
-             
-             // 获取视频总时长,单位秒
-             Float64 durationSeconds = CMTimeGetSeconds([myAsset duration]);
-             
-             NSLog(@"%f~!~!~!~",durationSeconds);
-             
-             NSMutableArray * timeArr = [NSMutableArray array];
-             //30*20 = 600;
-             
-             allImageNum = durationSeconds*ZHEN;
-             currentImageNum = 0;
-             
-             //i是每帧的秒数
-             for (int i = 0; i < allImageNum; i++) {
-                 CMTime time = CMTimeMake(i*10, ZHEN*10);
-                 [timeArr addObject:[NSValue valueWithCMTime:time]];
-             }
-             
-             //    myImageGenertor  必须为strong
-             
-             [self.myImageGenerator generateCGImagesAsynchronouslyForTimes:timeArr
-                                                         completionHandler:^(CMTime  requestedTime, CGImageRef image, CMTime actualTime,
-                                                                             AVAssetImageGeneratorResult result, NSError *error) {
-                                                             CFBridgingRelease(CMTimeCopyDescription(NULL, requestedTime));
-                                                             CFBridgingRelease(CMTimeCopyDescription(NULL, actualTime));
-                                                             
-                                                             if (result == AVAssetImageGeneratorSucceeded) {
-                                                                 @autoreleasepool {
-                                                                     UIImage * image1 = [UIImage imageWithCGImage:image];
-                                                                     [[WZZMutableArray shareWZZMutableArray] addImage:image1 arrName:IMAGESARRAY success:nil failed:nil];
-                                                                 }
-                                                                 currentImageNum++;
-                                                                 double aaa = (double)currentImageNum/(double)allImageNum*100.0f;
-                                                                 NSInteger progress = (NSInteger)aaa;
-                                                                 if (progressBlock) {
-                                                                     progressBlock(progress);
-                                                                 }
-                                                                 if (currentImageNum == allImageNum) {
-                                                                     if (finishBlock) {
-                                                                         finishBlock();
-                                                                     }
-                                                                 }
-                                                             }
-                                                             
-                                                             if (result == AVAssetImageGeneratorFailed) {
-                                                                 NSLog(@"Failed with error: %@", [error localizedDescription]);
-                                                             }
-                                                             if (result == AVAssetImageGeneratorCancelled) {
-                                                                 NSLog(@"Canceled");
-                                                             }
-                                                         }];
-             //-------------------------------------------------------
-         }];
+        //    value为  总帧数，timescale为  fps
+        self.myImageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:Asset];
+        
+        self.myImageGenerator.appliesPreferredTrackTransform = YES;
+        //解决 时间不准确问题
+        self.myImageGenerator.requestedTimeToleranceBefore = kCMTimeZero;
+        self.myImageGenerator.requestedTimeToleranceAfter = kCMTimeZero;
+        
+        
+        // 获取视频总时长,单位秒
+        allTime = CMTimeGetSeconds([Asset duration]);
+        
+        NSLog(@"%f~!~!~!~",allTime);
+        
+        //30*20 = 600;
+        
+        //总帧数
+        allImageNum = allTime*ZHEN;
+        //当前帧数
+        currentImageNum = 0;
+        allDuan = 0;
+        
+        if ((NSInteger)allTime%10) {
+            //+1
+            allDuan = (NSInteger)allTime/10+1;
+        } else {
+            //整除
+            allDuan = (NSInteger)allTime/10;
+        }
+        
+        allAV = [NSMutableArray array];
+        for (int i = 0; i < allDuan; i++) {
+            //遍历所有段
+            AVMutableComposition *avMutableComposition = [AVMutableComposition composition];
+            
+            AVMutableCompositionTrack *avMutableCompositionTrack = [avMutableComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+            
+            AVAssetTrack *avAssetTrack = [[Asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+            
+            
+            NSError *error = nil;
+            // 这块是裁剪,rangtime .前面的是开始时间,后面是裁剪多长 (我这裁剪的是从第二秒开始裁剪，裁剪2.55秒时长.)
+            
+            Float64 durTime = 10;
+            if (i == allDuan-1) {
+                //最后一段
+                durTime = allTime-(allDuan-1)*10;
+            }
+            
+            [avMutableCompositionTrack insertTimeRange:CMTimeRangeMake(CMTimeMakeWithSeconds(i*10.0f, ZHEN), CMTimeMakeWithSeconds(durTime, ZHEN))
+                                               ofTrack:avAssetTrack
+                                                atTime:kCMTimeZero
+                                                 error:&error];
+            AVAsset * myAsset = avMutableComposition;
+            [allAV addObject:myAsset];
+        }
+        currentDuan = 0;
+        [self diguiProgress:progressBlock finishBlock:finishBlock];
+        
+        
+        //-------------------------------------------------------
+        
     } failed:^{
     }];
     
+}
+
+- (void)diguiProgress:(void(^)(NSInteger))progressBlock finishBlock:(void(^)())finishBlock {
+    
+    AVAsset * myAsset = allAV[currentDuan];
+    
+    self.myImageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:myAsset];
+    
+    self.myImageGenerator.appliesPreferredTrackTransform = YES;
+    //解决 时间不准确问题
+    self.myImageGenerator.requestedTimeToleranceBefore = kCMTimeZero;
+    self.myImageGenerator.requestedTimeToleranceAfter = kCMTimeZero;
+    
+    
+    // 获取视频总时长,单位秒
+    Float64 durationSeconds = CMTimeGetSeconds([myAsset duration]);
+    NSInteger duanAllZhen = durationSeconds*ZHEN;
+    __block NSInteger currentZ = 0;
+    
+    NSMutableArray * timeArr = [NSMutableArray array];
+    //i是每帧的秒数
+    for (int i = 0; i < durationSeconds*ZHEN; i++) {
+        CMTime time = CMTimeMake(i*10, ZHEN*10);
+        [timeArr addObject:[NSValue valueWithCMTime:time]];
+    }
+    
+    //    myImageGenertor  必须为strong
+    [self.myImageGenerator generateCGImagesAsynchronouslyForTimes:timeArr
+                                                completionHandler:^(CMTime  requestedTime, CGImageRef image, CMTime actualTime,
+                                                                    AVAssetImageGeneratorResult result, NSError *error) {
+                                                    CFBridgingRelease(CMTimeCopyDescription(NULL, requestedTime));
+                                                    CFBridgingRelease(CMTimeCopyDescription(NULL, actualTime));
+                                                    if (result == AVAssetImageGeneratorSucceeded) {
+                                                        @autoreleasepool {
+                                                            UIImage * image1 = [UIImage imageWithCGImage:image];
+                                                            [[WZZMutableArray shareWZZMutableArray] addImage:image1 arrName:IMAGESARRAY success:nil failed:nil];
+                                                        }
+                                                        double aaa = (double)currentImageNum/(double)allImageNum*100.0f;
+                                                        NSInteger progress = (NSInteger)aaa;
+                                                        if (progressBlock) {
+                                                            progressBlock(progress);
+                                                        }
+                                                        //一段的最后一帧
+                                                        NSLog(@"%ld->%ld", currentZ, duanAllZhen-1);
+                                                        if (currentZ == duanAllZhen-1) {
+                                                            currentZ = 0;
+                                                            //所有视频的最后一帧
+                                                            if (currentImageNum == allImageNum-1) {
+                                                                if (finishBlock) {
+                                                                    finishBlock();
+                                                                    return ;
+                                                                }
+                                                            } else {
+                                                                currentDuan++;
+                                                                [self diguiProgress:progressBlock finishBlock:finishBlock];
+                                                            }
+                                                        }
+                                                        //帧都加1
+                                                        currentZ++;
+                                                        currentImageNum++;
+                                                    }
+                                                    
+                                                    if (result == AVAssetImageGeneratorFailed) {
+                                                        NSLog(@"Failed with error: %@", [error localizedDescription]);
+                                                    }
+                                                    if (result == AVAssetImageGeneratorCancelled) {
+                                                        NSLog(@"Canceled");
+                                                    }
+                                                }];
 }
 
 #pragma mark - 帧转视频

@@ -201,6 +201,7 @@
         [[WZZVideoEditManager sharedWZZVideoEditManager] remixVideoAndAudioWithVideoURL:okURL audioURL:_videoUrl fileName:@"aaa" complete:^(NSURL *okURL) {
             [hud setLabelText:@"处理完成"];
             [hud hide:YES];
+            [WZZPlayerManager playMovieWithURLString:[NSString stringWithContentsOfURL:okURL encoding:NSUTF8StringEncoding error:nil] presentVC:self];
             [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
             [self dismissViewControllerAnimated:YES completion:nil];
         }];
@@ -369,7 +370,7 @@
     sourceFaceArr = [NSMutableArray array];
     editFaceArr = [NSMutableArray array];
     
-    MBProgressHUD * hud = [MBProgressHUD showMessage:@"1/3解析视频:0%%"];
+    MBProgressHUD * hud = [MBProgressHUD showMessage:@"1/3解析视频:0%"];
 
     [[WZZMutableArray shareWZZMutableArray] arrayWithName:sourceImageArr success:nil failed:nil];
     [[WZZMutableArray shareWZZMutableArray] arrayWithName:editImageArr success:nil failed:nil];
@@ -377,7 +378,7 @@
     NSLog(@"开始拆分视频");
     
     [[WZZVideoEditManager sharedWZZVideoEditManager] video2ImagesWithURL:_videoUrl progress:^(NSInteger progress) {
-        NSLog(@"%ld", progress);
+        NSLog(@"------>%ld", progress);
         hud.labelText = [NSString stringWithFormat:@"1/3解析视频:%ld%%", progress];
     } finishBlock:^() {
         NSInteger inte = [[WZZMutableArray shareWZZMutableArray] countWithName:IMAGESARRAY];

@@ -53,22 +53,21 @@ static WZZMutableArray *_instance;
 //添加一个图片
 - (void)addImage:(UIImage *)image arrName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock {
     @autoreleasepool {
+            NSData * data = UIImageJPEGRepresentation(image, 0.3f);
         
-        NSData * data = UIImageJPEGRepresentation(image, 0.5f);
-
-        if ([_fmdb executeUpdate:[NSString stringWithFormat:@"insert into %@(obj) values(?);", name], data]) {
-            //成功
-            NSLog(@"插入成功");
-            if (successBlock) {
-                successBlock();
+            if ([_fmdb executeUpdate:[NSString stringWithFormat:@"insert into %@(obj) values(?);", name], data]) {
+                //成功
+                NSLog(@"插入成功");
+                if (successBlock) {
+                    successBlock();
+                }
+            } else {
+                //失败
+                NSLog(@"插入失败");
+                if (failedBlock) {
+                    failedBlock();
+                }
             }
-        } else {
-            //失败
-            NSLog(@"插入失败");
-            if (failedBlock) {
-                failedBlock();
-            }
-        }
     }
 }
 
@@ -87,7 +86,7 @@ static WZZMutableArray *_instance;
 
 //修改某张图
 - (void)replacementImage:(UIImage *)image atIndex:(NSInteger)index arrName:(NSString *)name success:(void(^)())successBlock failed:(void(^)())failedBlock {
-    if ([_fmdb executeUpdate:[NSString stringWithFormat:@"update %@ set obj=? where idx=?", name], UIImagePNGRepresentation(image), [NSString stringWithFormat:@"%ld", index+1]]) {
+    if ([_fmdb executeUpdate:[NSString stringWithFormat:@"update %@ set obj=? where idx=?", name], UIImageJPEGRepresentation(image, 1.0f), [NSString stringWithFormat:@"%ld", index+1]]) {
         //成功
         if (successBlock) {
             successBlock();
