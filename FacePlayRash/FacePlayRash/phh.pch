@@ -10,5 +10,9 @@
 #define phh_pch
 
 #import "MBProgressHUD+HM.h"
+#import "HttpTool.h"
+
+#define YuMing @"http://123.57.220.137:7789"
+#define FaildLoad @"网络获取失败"
 
 #endif /* phh_pch */

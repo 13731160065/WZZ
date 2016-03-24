@@ -10,6 +10,7 @@
 #import "WZZVideoEditManager.h"
 #import "WZZMutableArray.h"
 #import "WZZPlayerManager.h"
+#import "WZZUploadVideoVC.h"
 
 #define sourceImageArr @"sourceImageArr"
 #define editImageArr @"editImageArr"
@@ -31,6 +32,8 @@
     NSInteger zhen;
     UIButton * edit10Button;
     UITextField * textField10;
+    //封面图
+    UIImage * currentMainImage;
 }
 
 @end
@@ -100,8 +103,18 @@
     [backButton setTitle:@"返回" forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
+    UIButton * setMainButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.view addSubview:setMainButton];
+    [setMainButton setFrame:CGRectMake(50, 70+50+30, 100, 30)];
+    [setMainButton setTitle:@"设为封面" forState:UIControlStateNormal];
+    [setMainButton addTarget:self action:@selector(setMainButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
     [self loadData];
+}
+
+- (void)setMainButtonClick {
+    currentMainImage = [[WZZMutableArray shareWZZMutableArray] imageWithIndex:currentImageIdx arrName:editImageArr];
+    [MBProgressHUD showSuccess:@"已将此帧设为封面"];
 }
 
 - (void)resigTF {
@@ -117,7 +130,7 @@
 //返回
 - (void)backButtonClick {
     [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 //编辑十帧
@@ -193,7 +206,7 @@
     NSString * uploadStr = [self arrayToJson:uploadArr];
     NSLog(@"%@", uploadStr);
     
-    MBProgressHUD * hud = [MBProgressHUD showMessage:@"合成视频:0%%%"];
+    MBProgressHUD * hud = [MBProgressHUD showMessage:@"合成视频:0%%"];
     [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr progress:^(double progress) {
         [hud setLabelText:[NSString stringWithFormat:@"合成视频:%.0lf%%", progress]];
     } complete:^(NSURL *okURL) {
@@ -201,11 +214,12 @@
         [[WZZVideoEditManager sharedWZZVideoEditManager] remixVideoAndAudioWithVideoURL:okURL audioURL:_videoUrl fileName:@"aaa" complete:^(NSURL *okURL) {
             [hud setLabelText:@"处理完成"];
             [hud hide:YES];
-            [WZZPlayerManager playMovieWithURLString:[NSString stringWithContentsOfURL:okURL encoding:NSUTF8StringEncoding error:nil] presentVC:self];
-            [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
-            [self dismissViewControllerAnimated:YES completion:nil];
+            WZZUploadVideoVC * uploadVC = [[WZZUploadVideoVC alloc] init];
+            uploadVC.uploadURL = okURL;
+            uploadVC.mainImage = currentMainImage;
+            uploadVC.uploadDicDataStr = uploadStr;
+            [self.navigationController pushViewController:uploadVC animated:YES];
         }];
-        
     }];
 }
 

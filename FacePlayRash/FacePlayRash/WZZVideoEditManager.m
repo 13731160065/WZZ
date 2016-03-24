@@ -12,6 +12,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
 #define ZHEN 20
+#define MIAOMEIDUAN 20
 
 //定义了一些简单处理32位像素的宏。为了得到红色通道的值，你需要得到前8位。为了得到其它的颜色通道值，你需要进行位移并取截取
 #define Mask8(x) ( (x) & 0xFF )
@@ -74,12 +75,12 @@ singleton_implementation(WZZVideoEditManager)
         currentImageNum = 0;
         allDuan = 0;
         
-        if ((NSInteger)allTime%10) {
+        if ((NSInteger)allTime%MIAOMEIDUAN) {
             //+1
-            allDuan = (NSInteger)allTime/10+1;
+            allDuan = (NSInteger)allTime/MIAOMEIDUAN+1;
         } else {
             //整除
-            allDuan = (NSInteger)allTime/10;
+            allDuan = (NSInteger)allTime/MIAOMEIDUAN;
         }
         
         allAV = [NSMutableArray array];
@@ -95,13 +96,13 @@ singleton_implementation(WZZVideoEditManager)
             NSError *error = nil;
             // 这块是裁剪,rangtime .前面的是开始时间,后面是裁剪多长 (我这裁剪的是从第二秒开始裁剪，裁剪2.55秒时长.)
             
-            Float64 durTime = 10;
+            Float64 durTime = MIAOMEIDUAN;
             if (i == allDuan-1) {
                 //最后一段
-                durTime = allTime-(allDuan-1)*10;
+                durTime = allTime-(allDuan-1)*MIAOMEIDUAN;
             }
             
-            [avMutableCompositionTrack insertTimeRange:CMTimeRangeMake(CMTimeMakeWithSeconds(i*10.0f, ZHEN), CMTimeMakeWithSeconds(durTime, ZHEN))
+            [avMutableCompositionTrack insertTimeRange:CMTimeRangeMake(CMTimeMakeWithSeconds(i*MIAOMEIDUAN, ZHEN), CMTimeMakeWithSeconds(durTime, ZHEN))
                                                ofTrack:avAssetTrack
                                                 atTime:kCMTimeZero
                                                  error:&error];
