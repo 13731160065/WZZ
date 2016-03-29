@@ -8,6 +8,7 @@
 
 #import "WZZUploadVideoVC.h"
 #import "WZZPlayerManager.h"
+#import "WZZVideoEditManager.h"
 
 @interface WZZUploadVideoVC ()<UITextFieldDelegate>
 {
@@ -39,7 +40,7 @@
     
     //预览视频
     UIButton * playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:playButton];
+//    [self.view addSubview:playButton]; 
     [playButton setTitle:@"预览视频" forState:UIControlStateNormal];
     [playButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [playButton setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-8-100, 20, 100, 44)];
@@ -136,7 +137,7 @@
         //免费
         [uploadDic setObject:UPLOAD_HAVEFEENO forKey:UPLOAD_HAVEFEE];
     }
-    [uploadDic setObject:@"1" forKey:@"userId"];
+//    [uploadDic setObject:@"1" forKey:@"userId"];
     [uploadDic setObject:desf.text forKey:UPLOAD_DES];
     //坐标
     [uploadDic setObject:self.uploadDicDataStr forKey:@"pictures"];
@@ -158,6 +159,8 @@
                 //视频上传成功
                 [hud hide:YES];
                 [MBProgressHUD showSuccess:@"上传成功"];
+                [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             } failure:^(NSError *error) {
                 [hud hide:YES];
                 [MBProgressHUD showError:FaildLoad];
@@ -174,6 +177,7 @@
 
 //返回
 - (void)backBtnClick {
+    [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

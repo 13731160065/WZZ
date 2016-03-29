@@ -206,6 +206,7 @@
     NSString * uploadStr = [self arrayToJson:uploadArr];
     NSLog(@"%@", uploadStr);
     
+#if 0
     MBProgressHUD * hud = [MBProgressHUD showMessage:@"合成视频:0%%"];
     [[WZZVideoEditManager sharedWZZVideoEditManager] images2VideoWithImageArrName:editImageArr progress:^(double progress) {
         [hud setLabelText:[NSString stringWithFormat:@"合成视频:%.0lf%%", progress]];
@@ -221,6 +222,13 @@
             [self.navigationController pushViewController:uploadVC animated:YES];
         }];
     }];
+#else
+    WZZUploadVideoVC * uploadVC = [[WZZUploadVideoVC alloc] init];
+    uploadVC.uploadURL = self.videoUrl;
+    uploadVC.mainImage = currentMainImage;
+    uploadVC.uploadDicDataStr = uploadStr;
+    [self.navigationController pushViewController:uploadVC animated:YES];
+#endif
 }
 
 //编辑
@@ -276,8 +284,12 @@
 - (void)insertFaceButtonClick:(UIButton *)btn {
     //添加
     [tmpFaceImageView removeFromSuperview];
+#if 0
     tmpFaceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/4, [UIScreen mainScreen].bounds.size.width/4/topImage.size.width*topImage.size.height)];
     [tmpFaceImageView setCenter:tmpImageView.center];
+#else
+    tmpFaceImageView = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2-[UIScreen mainScreen].bounds.size.width/4/2, tmpImageView.frame.size.height/2-[UIScreen mainScreen].bounds.size.width/4/topImage.size.width*topImage.size.height/2, [UIScreen mainScreen].bounds.size.width/4, [UIScreen mainScreen].bounds.size.width/4/topImage.size.width*topImage.size.height)];
+#endif
     [tmpFaceImageView setImage:topImage];
     [tmpFaceImageView setUserInteractionEnabled:YES];
     [tmpImageView addSubview:tmpFaceImageView];

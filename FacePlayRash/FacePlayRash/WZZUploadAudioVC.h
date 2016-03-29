@@ -10,4 +10,14 @@
 
 @interface WZZUploadAudioVC : UIViewController
 
+/**
+ 上传图片
+ */
+@property (strong, nonatomic) UIImage * uploadImage;
+
+/**
+ 上传坐标
+ */
+@property (strong, nonatomic) NSString * uploadDicStr;
+
 @end

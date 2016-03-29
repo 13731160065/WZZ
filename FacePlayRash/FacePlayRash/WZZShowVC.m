@@ -25,8 +25,6 @@
     [self.view addSubview:imageView];
     imageView.image = self.image;
     imageView.frame = CGRectMake(0, 64, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/self.image.size.width*self.image.size.height);
-    [imageView setUserInteractionEnabled:YES];
-    [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleImage)]];
     
     UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:button];
@@ -38,13 +36,7 @@
 }
 
 - (void)backClick {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
-
-- (void)handleImage {
-    imageView.image = [[WZZVideoEditManager sharedWZZVideoEditManager] handleImageWithImage:self.image];
-    imageView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height/2-[UIScreen mainScreen].bounds.size.width/imageView.image.size.width*imageView.image.size.height/2, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/imageView.image.size.width*imageView.image.size.height);
-}
-
 
 @end
