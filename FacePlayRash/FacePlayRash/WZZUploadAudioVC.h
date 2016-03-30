@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WZZVideoEditManager.h"
 
 @interface WZZUploadAudioVC : UIViewController
 
@@ -18,6 +19,6 @@
 /**
  上传坐标
  */
-@property (strong, nonatomic) NSString * uploadDicStr;
+@property (strong, nonatomic) WZZFaceModel * uploadModel;
 
 @end

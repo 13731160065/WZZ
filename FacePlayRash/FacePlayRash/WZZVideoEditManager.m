@@ -221,7 +221,9 @@ singleton_implementation(WZZVideoEditManager)
 //帧转视频方法
 - (void)images2VideoWithImageArr:(NSMutableArray <UIImage *>*)imagesArr
 {
-    CGSize size = [imagesArr[0] size];//定义视频的大小
+//    CGSize sourceSize = [imagesArr[0] size];//源视频大小
+//    CGSize size = CGSizeMake(960, 960/sourceSize.width*sourceSize.height);//定义视频的大小
+    CGSize size = [imagesArr[0] size];//源视频大小
     
     NSError *error = nil;
     
@@ -781,4 +783,5 @@ singleton_implementation(WZZVideoEditManager)
 @end
 
 @implementation WZZFaceModel
+
 @end

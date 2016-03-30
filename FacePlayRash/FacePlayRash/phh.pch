@@ -12,7 +12,7 @@
 #import "MBProgressHUD+HM.h"
 #import "HttpTool.h"
 
-#define YuMing @"http://123.57.220.137:7789"
+#define YuMing @"http://192.168.1.157:8080"
 #define FaildLoad @"网络获取失败"
 
 #endif /* phh_pch */

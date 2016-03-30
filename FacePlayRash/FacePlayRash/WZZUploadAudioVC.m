@@ -8,12 +8,15 @@
 
 #import "WZZUploadAudioVC.h"
 #import "WZZShowVC.h"
+#import "WZZChooseBackView.h"
 
 @interface WZZUploadAudioVC ()<UITextFieldDelegate>
 {
-    NSMutableArray * tfArr;
-    UIScrollView * scroll;
     UISwitch * switchBtn;
+    UIScrollView * scroll;
+    NSInteger currentPicTypel;
+    NSString * currentPicName;
+    UIButton * selectButton;
 }
 @end
 
@@ -37,37 +40,34 @@
     [backButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [backButton addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
-    //预览视频
+    //预览图像
     UIButton * playButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:playButton];
-    [playButton setTitle:@"预览视频" forState:UIControlStateNormal];
+    [playButton setTitle:@"预览图像" forState:UIControlStateNormal];
     [playButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [playButton setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-8-100, 20, 100, 44)];
     [playButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
     [playButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [playButton addTarget:self action:@selector(playVideo) forControlEvents:UIControlEventTouchUpInside];
     
+    selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.view addSubview:selectButton];
+    [selectButton addTarget:self action:@selector(selectBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [selectButton setFrame:CGRectMake(0, 64+51, [UIScreen mainScreen].bounds.size.width, 50)];
+    [selectButton setTitle:@"点击选择标签所属组" forState:UIControlStateNormal];
+    [selectButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [selectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [selectButton setBackgroundColor:[UIColor whiteColor]];
     
-    tfArr = [NSMutableArray array];
-    NSArray * nameArr = @[@"模版名称", @"模版描述", @"购买价格"];
-    NSArray * holdArr = @[@"在此填写视频模版名称", @"在此填写视频模版描述", @"关闭右边按钮为免费->"];
-    [nameArr enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        UIView * view1 = [[UIView alloc] initWithFrame:CGRectMake(0, 64+idx*51, [UIScreen mainScreen].bounds.size.width, 50)];
-        [self.view addSubview:view1];
-        [view1 setBackgroundColor:[UIColor whiteColor]];
-        UITextField * tf = [self creatTFWithView:view1 titleText:nameArr[idx] placeHolderText:holdArr[idx]];
-        [tfArr addObject:tf];
-        [tf setDelegate:self];
-        if (idx == 2) {
-            [tf setKeyboardType:UIKeyboardTypeDecimalPad];
-        }
-    }];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 64+2*51, [UIScreen mainScreen].bounds.size.width, 50)];
+    [self.view addSubview:label];
+    [label setText:@"是否人物标签->"];
+    [label setUserInteractionEnabled:YES];
+    [label setBackgroundColor:[UIColor whiteColor]];
     
-    UITextField * tff = (UITextField *)tfArr[2];
     switchBtn = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    [switchBtn setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-switchBtn.frame.size.width-8, tff.frame.size.height/2-switchBtn.frame.size.height/2, 0, 0)];
-    [tff.superview addSubview:switchBtn];
-    [switchBtn addTarget:self action:@selector(feeChange:) forControlEvents:UIControlEventValueChanged];
+    [switchBtn setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-switchBtn.frame.size.width-8, 64+2*51+label.frame.size.height/2-switchBtn.frame.size.height/2, 0, 0)];
+    [self.view addSubview:switchBtn];
     switchBtn.on = YES;
     
     
@@ -84,12 +84,23 @@
     
 }
 
-- (void)feeChange:(UISwitch *)swb {
-    UITextField * tff = (UITextField *)tfArr[2];
-    tff.enabled = swb.on;
-    if (!swb.on) {
-        [tff setText:@""];
-    }
+- (void)selectBtn:(UIButton *)button {
+    [HttpTool GET:[YuMing stringByAppendingString:@"/faceplayapp/getAllTagGpic.action"] parameters:nil success:^(id responseObject) {
+        if ([responseObject[@"code"] integerValue] == 0) {
+            //成功
+            WZZChooseBackView * choose = [[WZZChooseBackView alloc] initWithChooseViewFrame:CGRectMake(button.frame.origin.x, CGRectGetMaxY(button.frame), button.frame.size.width, 200) dataArr:responseObject[@"rows"] selectBlock:^(NSString *selectName, NSInteger idx) {
+                currentPicTypel = idx;
+                currentPicName = selectName;
+                [selectButton setTitle:selectName forState:UIControlStateNormal];
+            }];
+            [self.view addSubview:choose];
+        } else {
+            //失败
+            [MBProgressHUD showError:@"获取标签失败"];
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD showError:@"网络连接失败"];
+    }];
 }
 
 - (void)playVideo {
@@ -98,51 +109,33 @@
     [self.navigationController pushViewController:showvc animated:YES];
 }
 
-#define UPLOAD_FEE @"price"//价格
-#define UPLOAD_NAME @"title"//名称
-#define UPLOAD_DES @"videoDesc"//描述
-#define UPLOAD_HAVEFEE @"freeOrpay"//是否付费
-#define UPLOAD_HAVEFEEYES @"1"//是
-#define UPLOAD_HAVEFEENO @"0"//否
-#define UPLOAD_IMAGEURL @"picUrl"//图片
-#define UPLOAD_IMAGEKEY @"headImg"//图片建
 //上传模版
 - (void)uploadVideo {
     NSMutableDictionary * uploadDic = [NSMutableDictionary dictionary];
-    UITextField * nametf = (UITextField *)tfArr[0];
-    UITextField * desf = (UITextField *)tfArr[1];
-    UITextField * feetf = (UITextField *)tfArr[2];
-    if ([nametf.text isEqualToString:@""] || [desf.text isEqualToString:@""]) {
-        [MBProgressHUD showError:@"信息不全"];
-        return;
-    }
     if (!self.uploadImage) {
         [MBProgressHUD showError:@"没有图片"];
         return;
     }
-    if ([self.uploadDicStr isEqualToString:@""] || !self.uploadDicStr) {
-        [MBProgressHUD showError:@"没有脸部区域"];
-    }
     if (switchBtn.on) {
-        //付费
-        if ([feetf.text isEqualToString:@""]) {
-            [MBProgressHUD showError:@"请输入价格或选择免费"];
-            return;
-        }
-        [uploadDic setObject:nametf.text forKey:UPLOAD_NAME];
-        [uploadDic setObject:UPLOAD_HAVEFEEYES forKey:UPLOAD_HAVEFEE];
-        [uploadDic setObject:feetf.text forKey:UPLOAD_FEE];
+        //人物
+        [uploadDic setObject:@"0" forKey:@"state"];
     } else {
-        //免费
-        [uploadDic setObject:UPLOAD_HAVEFEENO forKey:UPLOAD_HAVEFEE];
+        //非人物
+        [uploadDic setObject:@"1" forKey:@"state"];
     }
-    [uploadDic setObject:@"1" forKey:@"userId"];
-    [uploadDic setObject:desf.text forKey:UPLOAD_DES];
+    if ([selectButton.titleLabel.text isEqualToString:@"点击选择标签所属组"]) {
+        [MBProgressHUD showError:@"请选择标签所属组"];
+    }
+    [uploadDic setObject:@"0" forKey:@"picType"];
+    [uploadDic setObject:[NSString stringWithFormat:@"%lf", self.uploadModel.frame.size.height] forKey:@"height"];
+    [uploadDic setObject:[NSString stringWithFormat:@"%lf", self.uploadModel.frame.size.width] forKey:@"width"];
+    [uploadDic setObject:[NSString stringWithFormat:@"%lf", self.uploadModel.frame.origin.x] forKey:@"x"];
+    [uploadDic setObject:[NSString stringWithFormat:@"%lf", self.uploadModel.frame.origin.y] forKey:@"y"];
     //坐标
-    [uploadDic setObject:self.uploadDicStr forKey:@"pictures"];
+//    [uploadDic setObject:self.uploadDicStr forKey:@"pictures"];
     MBProgressHUD * hud = [MBProgressHUD showMessage:@"正在上传"];
-    [HttpTool POST:[YuMing stringByAppendingString:@"/faceplayapp/uploadMyVideo.action"] parameters:uploadDic constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:UIImageJPEGRepresentation(self.uploadImage, 1.0f) name:UPLOAD_IMAGEKEY fileName:@"vvv.jpg" mimeType:@"image/jpeg"];
+    [HttpTool POST:[YuMing stringByAppendingString:@"/faceplayapp/uploadSysPeoplePic.action"] parameters:uploadDic constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:UIImageJPEGRepresentation(self.uploadImage, 1.0f) name:@"picture" fileName:@"vvv.jpg" mimeType:@"image/jpeg"];
     } success:^(id responseObject) {
         //视频上传成功
         [hud hide:YES];
@@ -156,22 +149,6 @@
 //返回
 - (void)backBtnClick {
     [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-#pragma mark - 快速创建tf
-- (UITextField *)creatTFWithView:(UIView *)view titleText:(NSString *)title placeHolderText:(NSString *)placeHolder{
-    UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, view.frame.size.height)];
-    [view addSubview:titleLabel];
-    [titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [titleLabel setText:title];
-    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    
-    UITextField * TFView = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(titleLabel.frame), 0, view.frame.size.width-CGRectGetMaxX(titleLabel.frame), view.frame.size.height)];
-    [view addSubview:TFView];
-    [TFView setPlaceholder:placeHolder];
-    [TFView setFont:[UIFont systemFontOfSize:15]];
-    
-    return TFView;
 }
 
 @end

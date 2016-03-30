@@ -65,7 +65,7 @@
 
 //返回
 - (void)backButtonClick {
-    [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
+//    [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -84,23 +84,9 @@
 
 //合成视频
 - (void)playButtonClick {
-    
-    NSMutableArray * uploadArr = [NSMutableArray array];
-    
-    NSMutableDictionary * mutiDic = [NSMutableDictionary dictionary];
-    [mutiDic setObject:[NSNumber numberWithInteger:0] forKey:@"index"];
-    [mutiDic setObject:[NSNumber numberWithDouble:editFaceM.frame.origin.x] forKey:@"x"];
-    [mutiDic setObject:[NSNumber numberWithDouble:editFaceM.frame.origin.y] forKey:@"y"];
-    [mutiDic setObject:[NSNumber numberWithDouble:editFaceM.frame.size.width] forKey:@"width"];
-    [mutiDic setObject:[NSNumber numberWithDouble:editFaceM.frame.size.height] forKey:@"height"];
-    [uploadArr addObject:mutiDic];
-    
-    NSString * uploadStr = [self dicToJson:mutiDic];
-    NSLog(@"%@", uploadStr);
-    
     WZZUploadAudioVC * ccc = [[WZZUploadAudioVC alloc] init];
     ccc.uploadImage = editImage;
-    
+    ccc.uploadModel = editFaceM;
     [self.navigationController pushViewController:ccc animated:YES];
 }
 

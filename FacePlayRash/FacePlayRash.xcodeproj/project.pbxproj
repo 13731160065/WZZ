@@ -79,6 +79,7 @@
 		71D53C211CA2AACB00B22DBC /* WZZEditImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D53C201CA2AACB00B22DBC /* WZZEditImageVC.m */; };
 		71D53C251CA2AF3D00B22DBC /* imageg.png in Resources */ = {isa = PBXBuildFile; fileRef = 71D53C241CA2AF3D00B22DBC /* imageg.png */; };
 		71D53C271CA2AF4400B22DBC /* videog.png in Resources */ = {isa = PBXBuildFile; fileRef = 71D53C261CA2AF4400B22DBC /* videog.png */; };
+		71E869861CAB799100293945 /* WZZChooseBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E869851CAB799100293945 /* WZZChooseBackView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -327,6 +328,8 @@
 		71D53C201CA2AACB00B22DBC /* WZZEditImageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZEditImageVC.m; sourceTree = "<group>"; };
 		71D53C241CA2AF3D00B22DBC /* imageg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = imageg.png; sourceTree = "<group>"; };
 		71D53C261CA2AF4400B22DBC /* videog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = videog.png; sourceTree = "<group>"; };
+		71E869841CAB799100293945 /* WZZChooseBackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZZChooseBackView.h; sourceTree = "<group>"; };
+		71E869851CAB799100293945 /* WZZChooseBackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZZChooseBackView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,6 +455,8 @@
 				71AE53EB1C7F154200AB4ECD /* WZZVideoEditManager.m */,
 				71A254171C8D6FD900D4CFF5 /* WZZMutableArray.h */,
 				71A254181C8D6FD900D4CFF5 /* WZZMutableArray.m */,
+				71E869841CAB799100293945 /* WZZChooseBackView.h */,
+				71E869851CAB799100293945 /* WZZChooseBackView.m */,
 				71AE53311C7EB7B100AB4ECD /* Main.storyboard */,
 				71AE53341C7EB7B100AB4ECD /* Assets.xcassets */,
 				71AE53361C7EB7B100AB4ECD /* LaunchScreen.storyboard */,
@@ -937,6 +942,7 @@
 				71D53C1D1CA250C400B22DBC /* UIRefreshControl+AFNetworking.m in Sources */,
 				71ADD7A51C8911E3002E7331 /* WZZEditVideoVC.m in Sources */,
 				71D53C101CA250C400B22DBC /* AFNetworkReachabilityManager.m in Sources */,
+				71E869861CAB799100293945 /* WZZChooseBackView.m in Sources */,
 				71A254281C8D717300D4CFF5 /* FMDatabasePool.m in Sources */,
 				71A254291C8D717300D4CFF5 /* FMDatabaseQueue.m in Sources */,
 				71D53BE21CA2454A00B22DBC /* UIWindow+Hierarchy.m in Sources */,
