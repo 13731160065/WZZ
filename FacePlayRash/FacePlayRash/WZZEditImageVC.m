@@ -65,7 +65,7 @@
 
 //返回
 - (void)backButtonClick {
-//    [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
+    [[WZZVideoEditManager sharedWZZVideoEditManager] removeAllTmp];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

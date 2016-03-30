@@ -191,6 +191,10 @@
 
 //合成视频
 - (void)playButtonClick {
+    if (!currentMainImage) {
+        [MBProgressHUD showError:@"请先选择封面图"];
+        return;
+    }
     //预览
     NSMutableArray * uploadArr = [NSMutableArray array];
     [editFaceArr enumerateObjectsUsingBlock:^(WZZFaceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

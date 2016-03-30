@@ -19,12 +19,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FacePlayRash/WZZUploadAudioVC.m"
-            timestampString = "481017277.484151"
+            filePath = "FacePlayRash/WZZUploadVideoVC.m"
+            timestampString = "481021340.246985"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "-uploadVideo"
             landmarkType = "5">
          </BreakpointContent>
@@ -35,14 +35,94 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FacePlayRash/WZZUploadAudioVC.m"
-            timestampString = "481017279.428428"
+            filePath = "FacePlayRash/WZZUploadVideoVC.m"
+            timestampString = "481021341.459426"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
             landmarkName = "-uploadVideo"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FacePlayRash/WZZUploadVideoVC.m"
+            timestampString = "481021469.944377"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "-uploadVideo"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FacePlayRash/WZZUploadVideoVC.m"
+            timestampString = "481021480.618925"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "-uploadVideo"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FacePlayRash/WZZUploadVideoVC.m"
+            timestampString = "481022328.014986"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "-uploadVideo"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__31-[WZZUploadVideoVC uploadVideo]_block_invoke181"
+                  moduleName = "FacePlayRash"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wangzezhong/Desktop/github/trunk/FacePlayRash/FacePlayRash/WZZUploadVideoVC.m"
+                  timestampString = "481022450.045266"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "155"
+                  endingLineNumber = "155"
+                  offsetFromSymbolStart = "407">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__31-[WZZUploadVideoVC uploadVideo]_block_invoke_2"
+                  moduleName = "FacePlayRash"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/wangzezhong/Desktop/github/trunk/FacePlayRash/FacePlayRash/WZZUploadVideoVC.m"
+                  timestampString = "481022450.045538"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "155"
+                  endingLineNumber = "155"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

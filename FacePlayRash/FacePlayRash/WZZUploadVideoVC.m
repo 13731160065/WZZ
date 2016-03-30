@@ -104,7 +104,7 @@
 #define UPLOAD_HAVEFEEYES @"1"//是
 #define UPLOAD_HAVEFEENO @"0"//否
 #define UPLOAD_IMAGEURL @"picUrl"//图片
-#define UPLOAD_IMAGEKEY @"headImg"//图片建
+#define UPLOAD_IMAGEKEY @"picture"//图片建
 #define UPLOAD_VIDEOKEY @"video"//视频建
 //上传模版
 - (void)uploadVideo {
@@ -130,7 +130,6 @@
             [MBProgressHUD showError:@"请输入价格或选择免费"];
             return;
         }
-        [uploadDic setObject:nametf.text forKey:UPLOAD_NAME];
         [uploadDic setObject:UPLOAD_HAVEFEEYES forKey:UPLOAD_HAVEFEE];
         [uploadDic setObject:feetf.text forKey:UPLOAD_FEE];
     } else {
@@ -139,20 +138,21 @@
     }
 //    [uploadDic setObject:@"1" forKey:@"userId"];
     [uploadDic setObject:desf.text forKey:UPLOAD_DES];
+    [uploadDic setObject:nametf.text forKey:UPLOAD_NAME];
     //坐标
     [uploadDic setObject:self.uploadDicDataStr forKey:@"pictures"];
     MBProgressHUD * hud = [MBProgressHUD showMessage:@"正在提交"];
-    [HttpTool POST:[YuMing stringByAppendingString:@"/faceplayapp/imgupload.action"] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    [HttpTool POST:[YuMing stringByAppendingString:@"/faceplayapp/uploadVideofacePic.action"] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:UIImageJPEGRepresentation(self.mainImage, 0.3f) name:UPLOAD_IMAGEKEY fileName:@"mainImage.jpg" mimeType:@"image/jpeg"];
     } success:^(id responseObject) {
         //上传成功
         if ([responseObject[@"code"] integerValue] == 0) {
             //成功
-            NSString * imagePath = responseObject[@"rows"][@"imgurl"];
+            NSString * imagePath = responseObject[@"rows"][@"facePicUrl"];
             [uploadDic setObject:imagePath forKey:UPLOAD_IMAGEURL];
             NSLog(@"%@", self.uploadURL);
 
-            [HttpTool POST:[YuMing stringByAppendingString:@"/faceplayapp/uploadMyVideo.action"] parameters:uploadDic constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [HttpTool POST:[YuMing stringByAppendingString:@"/faceplayapp/addModelVideo.action"] parameters:uploadDic constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
                 [formData appendPartWithFileURL:self.uploadURL name:UPLOAD_VIDEOKEY fileName:@"vvv.mp4" mimeType:@"video/mp4" error:nil];
                 
             } success:^(id responseObject) {
