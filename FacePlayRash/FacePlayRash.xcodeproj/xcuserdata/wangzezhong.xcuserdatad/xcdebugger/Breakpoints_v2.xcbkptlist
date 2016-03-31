@@ -77,53 +77,5 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FacePlayRash/WZZUploadVideoVC.m"
-            timestampString = "481022328.014986"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
-            landmarkName = "-uploadVideo"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__31-[WZZUploadVideoVC uploadVideo]_block_invoke181"
-                  moduleName = "FacePlayRash"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/wangzezhong/Desktop/github/trunk/FacePlayRash/FacePlayRash/WZZUploadVideoVC.m"
-                  timestampString = "481022450.045266"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "155"
-                  endingLineNumber = "155"
-                  offsetFromSymbolStart = "407">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__31-[WZZUploadVideoVC uploadVideo]_block_invoke_2"
-                  moduleName = "FacePlayRash"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/wangzezhong/Desktop/github/trunk/FacePlayRash/FacePlayRash/WZZUploadVideoVC.m"
-                  timestampString = "481022450.045538"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "155"
-                  endingLineNumber = "155"
-                  offsetFromSymbolStart = "36">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

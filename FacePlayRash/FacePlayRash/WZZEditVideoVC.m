@@ -34,11 +34,21 @@
     UITextField * textField10;
     //封面图
     UIImage * currentMainImage;
+    NSInteger currentManIndex;
 }
 
 @end
 
 @implementation WZZEditVideoVC
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        currentManIndex = -1;
+    }
+    return self;
+}
 
 //视图加载
 - (void)viewDidLoad {
@@ -109,7 +119,18 @@
     [setMainButton setTitle:@"设为封面" forState:UIControlStateNormal];
     [setMainButton addTarget:self action:@selector(setMainButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
+    UIButton * setManButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.view addSubview:setManButton];
+    [setManButton setFrame:CGRectMake(CGRectGetMaxX(setMainButton.frame), 70+50+30, 100, 30)];
+    [setManButton setTitle:@"设为人物图" forState:UIControlStateNormal];
+    [setManButton addTarget:self action:@selector(setManButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    
     [self loadData];
+}
+
+- (void)setManButtonClick {
+    currentManIndex = currentImageIdx;
+    [MBProgressHUD showSuccess:@"已将此帧设为人物图"];
 }
 
 - (void)setMainButtonClick {
@@ -195,6 +216,10 @@
         [MBProgressHUD showError:@"请先选择封面图"];
         return;
     }
+    if (currentManIndex == -1) {
+        [MBProgressHUD showError:@"请选择人物图"];
+        return;
+    }
     //预览
     NSMutableArray * uploadArr = [NSMutableArray array];
     [editFaceArr enumerateObjectsUsingBlock:^(WZZFaceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -206,6 +231,16 @@
         [mutiDic setObject:[NSNumber numberWithDouble:obj.frame.size.height] forKey:@"height"];
         [uploadArr addObject:mutiDic];
     }];
+
+    //---------------------------------------------
+    NSMutableDictionary * mutiDic = [NSMutableDictionary dictionary];
+    [mutiDic setObject:[NSNumber numberWithInteger:currentManIndex] forKey:@"index"];
+    [mutiDic setObject:[NSNumber numberWithDouble:0.0f] forKey:@"x"];
+    [mutiDic setObject:[NSNumber numberWithDouble:0.0f] forKey:@"y"];
+    [mutiDic setObject:[NSNumber numberWithDouble:0.0f] forKey:@"width"];
+    [mutiDic setObject:[NSNumber numberWithDouble:0.0f] forKey:@"height"];
+    [uploadArr addObject:mutiDic];
+    //---------------------------------------------
     
     NSString * uploadStr = [self arrayToJson:uploadArr];
     NSLog(@"%@", uploadStr);
