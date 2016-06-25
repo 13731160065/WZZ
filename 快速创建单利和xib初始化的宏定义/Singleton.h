@@ -4,28 +4,35 @@
  功能:
  快速创建单例
  使用方法:
- 1.将 SIN_INTERFACE(类名) 添加到.h中
- 2.将 SIN_IMPLEMENTATION(类名) 添加到.m中
+ 1.将 singleton_interface(类名) 添加到.h中
+ 2.将 singleton_implementation(类名) 添加到.m中
  */
-#define singleton_interface(class) SIN_INTERFACE(class)
-#define singleton_implementation(class) SIN_IMPLEMENTATION(class)
+#define singleton_interface(class) ___SIN_INTERFACE(class)
+#define singleton_implementation(class) ___SIN_IMPLEMENTATION(class)
 
 /**
  重写init方法，让init方法读取nib文件
  使用方法:
- 将 INITXIB(NSString_NibName) 添加到.m中
+ 将 INITXIB(NibName) 添加到.m中
  */
-#define INITXIB(NSString_NibName) INITXIB_M(NSString_NibName)
+#define INITXIB(NibName) ___INITXIB_M(@#NibName)
+
+/**
+ 创建initWithXibFrame方法，读取nib文件，设置frame
+ 使用方法:
+ 将 INITXIBWITHFRAME(NibName) 添加到.m中
+ */
+#define INITXIBWITHFRAME(NibName) ___INITXYHWithFrame(NibName)
 
 #pragma mark end
 
 #pragma mark - @implementation
 
-// .h
-#define SIN_INTERFACE(class) + (instancetype)shared##class;
+//单利.h
+#define ___SIN_INTERFACE(class) + (instancetype)shared##class;
 
-// .m
-#define SIN_IMPLEMENTATION(class) \
+//单利.m
+#define ___SIN_IMPLEMENTATION(class) \
 static class *_instance; \
 \
 + (id)allocWithZone:(struct _NSZone *)zone \
@@ -47,10 +54,18 @@ _instance = [[class alloc] init]; \
 return _instance; \
 }
 
-//.m
-#define INITXIB_M(NSString_NibName) \
+//初始化xib.m
+#define ___INITXIB_M(NSString_NibName) \
 - (instancetype)init {\
 return [[NSBundle mainBundle] loadNibNamed:NSString_NibName owner:nil options:nil][0];\
+}
+
+//初始化xib带frame.m
+#define ___INITXYHWithFrame(NibName_NSString)\
+- (instancetype)initWithXibFrame:(CGRect)frame {\
+NibName_NSString * abcdefg = [[NSBundle mainBundle] loadNibNamed:@#NibName_NSString owner:nil options:nil][0];\
+[abcdefg setFrame:frame];\
+return a;\
 }
 
 #pragma mark end
