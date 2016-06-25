@@ -1,3 +1,5 @@
+#ifndef Singleton_h
+#define Singleton_h
 #pragma mark - @interface
 
 /**
@@ -69,3 +71,4 @@ return a;\
 }
 
 #pragma mark end
+#endif
